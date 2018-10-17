@@ -6,6 +6,8 @@
 
 运行demo：~~demo~~
 
+[TOC]
+
 ## 特性
 * 支持markdown（包含flowchat流程图）
 * 参数实体跳转
@@ -26,15 +28,9 @@
 
 ## 截图展示：
 
-![demo3](docs/images/demo3.png)
+![demo3](./images/demo3.png)
 
-![demo1](docs/images/demo1.png)
-
-
-
-
-## 快速使用
- todo
+![demo1](./images/demo1.png)
 
 ## 运行本项目
 
@@ -55,6 +51,7 @@ npm run build --report
 ```
 
 ### 安装java-plugin
+
 1. 执行java-plugins下的`build-html.sh`脚本打包前端工程至插件的resource目录下
 
 2. 执行mvn install 安装所有依赖.
