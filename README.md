@@ -7,7 +7,6 @@
 运行demo：~~demo~~
 
 
-
 [TOC]
 
 
@@ -19,8 +18,6 @@
 ![demo2](docs/images/demo2.png)
 
 ![demo3](docs/images/demo3.png)
-
-
 
 
 
@@ -52,14 +49,14 @@ pom.xml文件的`plugins`下引入以下配置
 
 ```xml
  <plugin>
-                <groupId>com.iflytek.cbg.hello</groupId>
+                <groupId>com.uyoqu</groupId>
                 <artifactId>hello-docs-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
                 <configuration>
                     <docDirectory>${project.basedir}/docs/api-docs</docDirectory>
                     <scanPackage>
-                        <package>com.iflytek.cbg.emoji.api</package>
-                        <package>com.iflytek.cbg.emoji.common.vo</package>
+                        <package>com.xx.api</package>
+                        <package>com.xx.vo</package>
                     </scanPackage>
                     <appName>案例项目</appName>
                     <copyright>demo</copyright>
