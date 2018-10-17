@@ -123,7 +123,7 @@
                         <span class="search-result-title" v-html="splitTitle(item.title)"></span>-<span class="name">{{ item.name }}</span>
                     </div>
                     <div v-else>
-                        <span class="center" style="color:">...</span>
+                        <span class="center">...</span>
                     </div>
                 </div>
             </AutoComplete>
@@ -134,8 +134,8 @@
             <sup class="ivu-badge-count badge-finish ivu-badge-count-success" style="top:0">{{info.finishCount}}</sup>
           </span>
           <span data-v-8dc7cce2="" class="ivu-badge"  v-if="info.incCount>0">
-          <Button type="dashed">接口总数</Button>         
-          <sup class="ivu-badge-count ivu-badge-count-normal">{{info.incCount}}</sup>
+            <Button type="dashed">接口总数</Button>
+            <sup class="ivu-badge-count ivu-badge-count-normal" style="top:0">{{info.incCount}}</sup>
           </span>                       
           <Button @click="handleConfig" type="primary">系统配置</Button>
         </div>
