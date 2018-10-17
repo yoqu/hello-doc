@@ -6,6 +6,11 @@
 
 运行demo：~~demo~~
 
+## 文档
+
+Link： [详细文档](https://yoqu.gitee.io/hello-doc)
+
+
 ## 特性
 * 支持markdown（包含flowchat流程图）
 * 参数实体跳转
@@ -31,34 +36,4 @@
 ![demo1](docs/images/demo1.png)
 
 
-
-
-## 快速使用
- todo
-
-## 运行本项目
-
-### 启动前端功能
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-### 安装java-plugin
-1. 执行java-plugins下的`build-html.sh`脚本打包前端工程至插件的resource目录下
-
-2. 执行mvn install 安装所有依赖.
-
-### 执行java-plugin
-
-在具体项目上直接使用`mvn hello-docs:doc`
+## 更新日志

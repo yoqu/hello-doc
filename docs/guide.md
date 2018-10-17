@@ -159,3 +159,27 @@ public class ApiRet implements Serializable {
 | ApiTimeline | 接口或实体更新日志,参数为`Timeline`数组 |
 | Timeline | 描述更新日志 |
 
+
+## 项目源码构建
+
+### 前端构建
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+```
+
+### 打包java-plugin
+
+1. 执行java-plugins目录下的`build-html.sh`脚本打包前端工程至插件的resource目录下
+
+2. 执行mvn install 将依赖安装到本地仓库
