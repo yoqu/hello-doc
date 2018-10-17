@@ -1,8 +1,8 @@
 
-# Hello doc
+# Hello Doc
 
 
-> Hello doc是一款快译通通过代码生成漂亮的api在线文档工具，支持java快速生成接口文档
+> Hello Doc是一款快译通通过代码生成漂亮的api在线文档工具，支持java快速生成接口文档
 
 运行demo：~~demo~~
 

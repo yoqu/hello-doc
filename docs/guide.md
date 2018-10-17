@@ -131,10 +131,15 @@ public class ApiRet implements Serializable {
 
 ###  maven插件配置解释
   `scanPackage`为必填项，需要指定扫描接口的包名，其他均为非必填项目
+  
   `appName`为项目名称
+  
   `docDirectory` 如果接口有指定api文档，那么将markdown的文档需要放到这个配置项对应的目录
+  
   `headers`此项为基础约定的header参数
+  
   `resps`为统一返回数据格式
+  
   `tips`为提示
 
 ### java使用的注解
