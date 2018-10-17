@@ -11,16 +11,6 @@
 
 
 
-截图展示：
-
-![demo1](docs/images/demo1.png)
-
-![demo2](docs/images/demo2.png)
-
-![demo3](docs/images/demo3.png)
-
-
-
 ## 特性
 * 支持markdown（包含flowchat流程图）
 * 参数实体跳转
@@ -36,6 +26,15 @@
 - [ ] 文档工具国际化支持
 - [ ] 文档工具接入在线评论支持评论功能
 - [ ] 文档导出为pdf和word格式
+
+
+
+## 截图展示：
+
+![demo3](docs/images/demo3.png)
+
+![demo1](docs/images/demo1.png)
+
 
 
 
