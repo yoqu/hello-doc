@@ -8,7 +8,7 @@
 
 ## 文档
 
-Link： [详细文档](https://yoqu.gitee.io/hello-doc/guide)
+Link： [详细文档](https://yoqu.gitee.io/hello-doc/#/guide)
 
 
 ## 特性
