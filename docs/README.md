@@ -4,9 +4,8 @@
 
 > Hello Doc是一款快译通通过代码生成漂亮的api在线文档工具，支持java快速生成接口文档
 
-运行demo：~~demo~~
+运行demo：[demo](https://yoqu.gitee.io/hello-doc-demo)
 
-[TOC]
 
 ## 特性
 * 支持markdown（包含flowchat流程图）
