@@ -69,31 +69,58 @@ pom.xml文件的`plugins`下引入以下配置
 
 1. 在接口类中添加以下注解
 ```java
-@ApiServiceDocs(cnName = "账号密码登录", methods = {"post"}, group = "用户模块", version = "1.0", doc = "userLogin", finish = 100)
-@ApiInDTO(clazz = ApiLoginReq.class)
-@ApiOutDTO(clazz = ApiLoginResp.class)
-public class LoginApiService extends AbstractApiService<ApiLoginReq, ApiLoginResp> {
+@RestController
+@RequestMapping("/")
+public class HelloController {
 
-    @Override
-    public ApiLoginResp service(ApiLoginReq apiLoginReq, ApiExtend apiExtend) throws ApiException {
-       return null;
+    @Autowired
+    IUserSvc userSvc;
+    
+    @GetMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ApiServiceDocs(cnName = "首页", group = "缓存模块", desc = "首页获取用户列表", finish = 100, version = "1.0")
+    @ApiOut(@Out(param = "List<User>", link = "User", desc = "用户列表", type = "User"))
+    public List<User> index() {
+        return userSvc.findAll();
+    }
+
+    @GetMapping("/{id}")
+    @ApiServiceDocs(cnName = "用户详情", group = "缓存模块", desc = "用户详情", finish = 100, version = "1.0")
+    public User detail(@In(remark = "这是一个备注", desc = "主键id") @PathVariable("id") String id) {
+        return userSvc.findById(id);
+    }
+
+    @GetMapping("test")
+    @ApiServiceDocs(cnName = "测试", group = "缓存模块", desc = "test", finish = 50, version = "1.0")
+    @ApiOut(@Out(param = "List<User>", link = "User", desc = "用户列表", type = "User"))
+    @ApiTimeline(@Timeline(time = "2018-10-18", content = "first test"))
+    public List<User> test(User user) {
+        return Collections.emptyList();
     }
 }
+
 ```
-@ApiServiceDocs为描述接口的信息
+
+`@ApiServiceDocs`为描述接口的信息，可以使用在方法级别或类级别
 `@ApiInDTO`和`@ApiOutDTO`为请求和相应实体
 
 2. 对象参数
 `@ApiInDTO`响应实体:
 ```java
-@Valid
-public class ApiLoginReq extends ApiReq {
+@ApiDTO(cnName = "用户", enName = "User", desc = "用户信息")
+public class User implements Serializable {
 
-    @ApiBasicFiled(desc = "用户手机号", type = "String", required = true)
-    private String account;
+    @ApiBasicFiled(desc = "名字")
+    private String name;
 
-    @ApiBasicFiled(desc = "用户密码", type = "String", required = true,example = "e10adc3949ba59abbe56e057f20f883e")
-    private String pwd;
+    @ApiBasicFiled(desc = "id")
+    private String id;
+
+    @ApiBasicFiled(desc = "年龄")
+    private int age;
+
+    @ApiBasicFiled(desc = "区域")
+    private String area;
 }
 ```
 通过对字段使用`@ApiBasicField`进行字段注解，描述参数信息
@@ -120,6 +147,9 @@ public class ApiRet implements Serializable {
     private String msg;
 }
 ```
+`@ApiGlobalCode`注解内容定义的是`ApiRet`字段变量名字，默认为code和msg
+
+
 ### 3.运行插件
 
 在项目目录下执行命令`mvn clean compile hello-docs:doc`
