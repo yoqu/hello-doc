@@ -1,4 +1,4 @@
-package com.uyoqu.hello.docs.core.vo;
+package com.uyoqu.hello.docs.plugin.vo;
 
 import com.uyoqu.hello.docs.core.annotation.ApiBasicFiled;
 import com.uyoqu.hello.docs.core.annotation.In;

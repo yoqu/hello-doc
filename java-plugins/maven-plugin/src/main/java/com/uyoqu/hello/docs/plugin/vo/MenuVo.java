@@ -1,4 +1,4 @@
-package com.uyoqu.hello.docs.core.vo;
+package com.uyoqu.hello.docs.plugin.vo;
 
 /**
  * Created by zhpeng2 on 2017/9/29.

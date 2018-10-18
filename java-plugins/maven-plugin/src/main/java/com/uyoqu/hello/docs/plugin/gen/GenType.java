@@ -1,4 +1,4 @@
-package com.uyoqu.hello.docs.core.gen;
+package com.uyoqu.hello.docs.plugin.gen;
 
 /**
  * 生成类型枚举。

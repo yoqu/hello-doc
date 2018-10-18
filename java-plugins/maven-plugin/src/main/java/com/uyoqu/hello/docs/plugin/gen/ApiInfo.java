@@ -1,6 +1,6 @@
-package com.uyoqu.hello.docs.core.gen;
+package com.uyoqu.hello.docs.plugin.gen;
 
-import com.uyoqu.hello.docs.core.vo.DtoDataVo;
+import com.uyoqu.hello.docs.plugin.vo.DtoDataVo;
 
 import java.util.ArrayList;
 import java.util.List;

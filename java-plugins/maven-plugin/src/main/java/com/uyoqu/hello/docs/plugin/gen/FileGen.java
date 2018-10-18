@@ -1,4 +1,4 @@
-package com.uyoqu.hello.docs.core.gen;
+package com.uyoqu.hello.docs.plugin.gen;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.FileUtils;

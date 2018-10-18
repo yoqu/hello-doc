@@ -1,4 +1,4 @@
-package com.uyoqu.hello.docs.core.gen;
+package com.uyoqu.hello.docs.plugin.gen;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package com.uyoqu.hello.docs.core.vo;
+package com.uyoqu.hello.docs.plugin.vo;
 
 public class CodeVo {
     private String code;

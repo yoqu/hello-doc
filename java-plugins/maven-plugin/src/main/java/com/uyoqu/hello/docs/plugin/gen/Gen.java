@@ -1,9 +1,9 @@
-//package com.uyoqu.hello.docs.core.gen;
+//package com.uyoqu.hello.docs.plugin.gen;
 //
 //
 //import com.alibaba.fastjson.JSON;
 //import com.uyoqu.hello.docs.core.annotation.*;
-//import com.uyoqu.hello.docs.core.vo.*;
+//import com.uyoqu.hello.docs.plugin.vo.*;
 //import org.apache.commons.io.FileUtils;
 //import org.apache.commons.lang3.ObjectUtils;
 //import org.apache.commons.lang3.StringUtils;
