@@ -8,14 +8,14 @@ import java.lang.annotation.*;
  */
 
 @Inherited
-@Target({ElementType.TYPE,ElementType.METHOD})
+@Target({ElementType.TYPE,ElementType.METHOD,ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface In {
 
     boolean required() default true;
 
     //参数名称
-    String param();
+    String param() default "";
 
     //类型
     String type() default "String";

@@ -145,6 +145,7 @@ export default {
       timelines: [],
       cnName: "",
       serviceName: "",
+      serviceFullName:"",
       desc: "",
       version: "",
       method: "",
@@ -206,6 +207,7 @@ export default {
           let service = services[this.$route.params.name];
           this.cnName = dataToField(service.cnName);
           this.serviceName = dataToField(service.serviceName);
+          this.serviceFullName = dataToField(service.serviceFullName);
           this.desc = dataToField(service.desc);
           this.version = dataToField(service.version);
           this.method = dataToField(service.method);
