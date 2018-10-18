@@ -68,6 +68,7 @@ pom.xml文件的`plugins`下引入以下配置
 ### 2. java类添加注解
 
 1. 在接口类中添加以下注解
+
 ```java
 @RestController
 @RequestMapping("/")
