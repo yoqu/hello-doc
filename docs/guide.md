@@ -163,9 +163,9 @@ public class ApiRet implements Serializable {
 demo地址：[spring-mvc](https://github.com/yoqu/spring-cache-demo)
 
 
-## 文档解释
+## 字段定义说明
 
-###  maven插件配置解释
+###  maven插件配置
   `scanPackage`为必填项，需要指定扫描接口的包名，其他均为非必填项目
   
   `appName`为项目名称
@@ -178,7 +178,7 @@ demo地址：[spring-mvc](https://github.com/yoqu/spring-cache-demo)
   
   `tips`为提示
 
-### java使用的注解
+### 注解
 
 | 注解 | 描述 |
 | ---- | ---- |
