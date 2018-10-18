@@ -187,6 +187,24 @@ public abstract class AbstractScanGen implements TopGen {
     resolveTimeline(clazz, timelineList);
   }
 
+
+  private List<TimelineVo> resolveMethodTimeline(Method method) {
+    final List<TimelineVo> timelineVos = new ArrayList<TimelineVo>();
+    if (!method.isAnnotationPresent(ApiTimeline.class)) {
+      return timelineVos;
+    }
+    ApiTimeline ann = method.getAnnotation(ApiTimeline.class);
+    if (ann == null || ann.value() == null || ann.value().length == 0)
+      return timelineVos;
+    for (Timeline timeline : ann.value()) {
+      TimelineVo vo = new TimelineVo(timeline);
+      vo.setUrl(resolveUrl(method));
+      timelineVos.add(vo);
+    }
+    return timelineVos;
+  }
+
+
   private void resolveTimeline(Class<?> clazz, final List<TimelineVo> list) throws GenException {
     try {
       if (clazz.isAnnotationPresent(ApiTimeline.class)) {
@@ -194,9 +212,7 @@ public abstract class AbstractScanGen implements TopGen {
         if (ann == null || ann.value() == null || ann.value().length == 0)
           return;
         for (Timeline timeline : ann.value()) {
-          TimelineVo vo = new TimelineVo();
-          vo.setTime(timeline.time());
-          vo.setContent(timeline.content());
+          TimelineVo vo = new TimelineVo(timeline);
           vo.setUrl(resolveUrl(clazz));
           list.add(vo);
         }
@@ -204,19 +220,7 @@ public abstract class AbstractScanGen implements TopGen {
         final List<TimelineVo> timelineVos = new ArrayList<TimelineVo>();
         ReflectionUtils.doWithMethods(clazz, new ReflectionUtils.MethodCallback() {
           public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-            if (!method.isAnnotationPresent(ApiTimeline.class)) {
-              return;
-            }
-            ApiTimeline ann = method.getAnnotation(ApiTimeline.class);
-            if (ann == null || ann.value() == null || ann.value().length == 0)
-              return;
-            for (Timeline timeline : ann.value()) {
-              TimelineVo vo = new TimelineVo();
-              vo.setTime(timeline.time());
-              vo.setContent(timeline.content());
-              vo.setUrl(resolveUrl(method));
-              timelineVos.add(vo);
-            }
+            timelineVos.addAll(resolveMethodTimeline(method));
           }
         });
         list.addAll(timelineVos);
@@ -526,14 +530,9 @@ public abstract class AbstractScanGen implements TopGen {
             vo.setResponses(resolveServiceOut(method));
           }
           //返回码
-          vo.setApiCodes(resolveCodes(clazz));
+          vo.setApiCodes(resolveCodes(method));
           // 时间轴
-          List<TimelineVo> timelines = new ArrayList<TimelineVo>();
-          try {
-            resolveTimeline(clazz, timelines);
-          } catch (GenException e) {
-            log.error("时间轴异常", e);
-          }
+          List<TimelineVo> timelines = resolveMethodTimeline(method);
           vo.setTimelines(timelines);
           serviceMap.put(vo.getServiceFullName(), vo);
         }

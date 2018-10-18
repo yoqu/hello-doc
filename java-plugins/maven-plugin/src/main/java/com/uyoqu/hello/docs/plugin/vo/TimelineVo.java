@@ -1,44 +1,54 @@
 package com.uyoqu.hello.docs.plugin.vo;
 
+import com.uyoqu.hello.docs.core.annotation.Timeline;
+
 /**
  * Created by zhpeng2 on 2017/9/29.
  */
 public class TimelineVo {
-    private String time;
-    private String content;
-    private String url;
+  private String time;
+  private String content;
+  private String url;
 
-    private transient Class<?> clazz;
+  public TimelineVo() {
+  }
 
-    public String getTime() {
-        return time;
-    }
+  public TimelineVo(Timeline timeline) {
+    setTime(timeline.time());
+    setContent(timeline.content());
+  }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
+  private transient Class<?> clazz;
 
-    public String getContent() {
-        return content;
-    }
+  public String getTime() {
+    return time;
+  }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+  public void setTime(String time) {
+    this.time = time;
+  }
 
-    public String getUrl() {
-        return url;
-    }
+  public String getContent() {
+    return content;
+  }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+  public void setContent(String content) {
+    this.content = content;
+  }
 
-    public Class<?> getClazz() {
-        return clazz;
-    }
+  public String getUrl() {
+    return url;
+  }
 
-    public void setClazz(Class<?> clazz) {
-        this.clazz = clazz;
-    }
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public Class<?> getClazz() {
+    return clazz;
+  }
+
+  public void setClazz(Class<?> clazz) {
+    this.clazz = clazz;
+  }
 }
