@@ -1,5 +1,6 @@
 package com.uyoqu.hello.docs.core.vo;
 
+import com.uyoqu.hello.docs.core.annotation.ApiBasicFiled;
 import com.uyoqu.hello.docs.core.annotation.In;
 import com.uyoqu.hello.docs.core.annotation.Out;
 
@@ -33,6 +34,18 @@ public class ServiceDataVo {
     required = String.valueOf(out.required());
     type = out.type();
     name = out.param();
+  }
+
+  public ServiceDataVo(ApiBasicFiled basicFiled) {
+    if (basicFiled == null) {
+      return;
+    }
+    setRequired(String.valueOf(basicFiled.required()));
+    setName(basicFiled.param());
+    setType(basicFiled.type());
+    setLink(basicFiled.link());
+    setDesc(basicFiled.desc());
+    setRemark(basicFiled.remark());
   }
 
   public String getLink() {

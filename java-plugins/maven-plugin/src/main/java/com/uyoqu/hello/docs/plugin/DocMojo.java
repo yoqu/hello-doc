@@ -18,7 +18,8 @@ package com.uyoqu.hello.docs.plugin;
 
 import cn.hutool.core.date.DateUtil;
 import com.uyoqu.hello.docs.core.gen.ApiInfo;
-import com.uyoqu.hello.docs.core.gen.Gen;
+import com.uyoqu.hello.docs.core.gen.FileGen;
+import com.uyoqu.hello.docs.core.gen.TopGen;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
@@ -116,11 +117,10 @@ public class DocMojo extends AbstractMojo {
         getLog().info("Hello Doc generation is skipped");
         return;
       }
-      Gen gen = new Gen();
+      TopGen gen = new FileGen();
       String destDirectory = outputDirectory.getPath() + "/api-doc";
-      gen.setDocRoot(destDirectory);
+      gen.init(getAppInfo(), destDirectory);
       gen.scanPakcages(scanPackage);
-      gen.initInfo(getAppInfo());
       gen.handler();
       //静态资源文件copy
       copyStaticData(destDirectory);
