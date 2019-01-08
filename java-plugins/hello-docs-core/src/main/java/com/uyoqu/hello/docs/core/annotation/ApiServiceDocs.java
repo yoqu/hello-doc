@@ -4,32 +4,48 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Created by lanjian
- */
-@java.lang.annotation.Target({ElementType.TYPE,ElementType.METHOD})
+@java.lang.annotation.Target({ElementType.TYPE, ElementType.METHOD})
 @java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ApiServiceDocs {
 
-    String cnName();
+  /**
+   * @return 中文名
+   */
+  String cnName();
 
-    String serviceName() default "";
+  /**
+   * @return 服务名
+   */
+  String serviceName() default "";
 
-    String version();
+  /**
+   * @return 版本号
+   */
+  String version();
 
-    String[] methods() default "POST";
+  /**
+   * @return 请求方法[GET/POST/PUT/DELETE]
+   */
+  String[] methods() default "POST";
 
-    String desc() default "";
+  /**
+   * @return 简介
+   */
+  String desc() default "";
 
-    String group() default "";
+  /**
+   * @return 菜单一级分组
+   */
+  String group() default "";
 
-    String doc() default "";
+  /**
+   * @return md文档相对路径
+   */
+  String doc() default "";
 
-    /**
-     * 完成开发进度百分比,默认为0,最高100
-     *
-     * @return
-     */
-    int finish() default 0;
+  /**
+   * @return 完成开发进度百分比, 默认为0, 最高100
+   */
+  int finish() default 0;
 }

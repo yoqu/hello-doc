@@ -5,7 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by lanjian
+ * DTO对象定义
  */
 @java.lang.annotation.Target({ElementType.TYPE})
 @java.lang.annotation.Retention(RetentionPolicy.RUNTIME)

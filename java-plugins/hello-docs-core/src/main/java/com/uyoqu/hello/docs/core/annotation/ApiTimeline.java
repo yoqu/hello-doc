@@ -4,7 +4,6 @@ import java.lang.annotation.*;
 
 /**
  * API时间轴。
- * Created by zhpeng2 on 2017/9/29.
  */
 @Inherited
 @Target({ElementType.TYPE,ElementType.METHOD})
@@ -12,7 +11,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface ApiTimeline {
     /**
-     * 时间轴列表。
+     * @return 时间轴列表。
      */
     Timeline[] value();
 }

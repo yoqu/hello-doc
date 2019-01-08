@@ -6,60 +6,130 @@
 
   <groupId>com.uyoqu</groupId>
   <artifactId>doc</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>pom</packaging>
+  <name>api-docs</name>
+  <description>A simple Api doc generate utils. Help us improve productivity</description>
+  <url>https://github.com/yoqu/hello-doc</url>
+  <scm>
+    <url>https://github.com/yoqu/hello-doc</url>
+    <connection>scm:git:git://github.com/yoqu/hello-doc.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/yoqu/hello-doc.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>yoqu</name>
+      <email>yoqulin@qq.com</email>
+    </developer>
+  </developers>
   <modules>
     <module>hello-docs-core</module>
     <module>maven-plugin</module>
   </modules>
   <properties>
     <spring.version>4.3.17.RELEASE</spring.version>
+    <javadoc.plugin.version>2.9.1</javadoc.plugin.version>
+    <maven.source.plugin.version>2.2.1</maven.source.plugin.version>
+    <gpg.executable>gpg2</gpg.executable>
   </properties>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>oss</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>oss</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
   <profiles>
     <profile>
-      <id>iflytek</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <distributionManagement>
-        <repository>
-          <id>nexus-releases</id>
-          <name>Releases</name>
-          <url>http://maven.iflytek.com:8081/nexus/content/repositories/ydhl-release/</url>
-        </repository>
-        <snapshotRepository>
-          <id>nexus-snapshots</id>
-          <name>Snapshots</name>
-          <url>http://maven.iflytek.com:8081/nexus/content/repositories/CTI-snapshot/</url>
-        </snapshotRepository>
-      </distributionManagement>
-      <!--依赖使用公司私服下载-->
-      <repositories>
-        <repository>
-          <id>iflytek-nexus</id>
-          <url>http://maven.iflytek.com:8081/nexus/content/groups/public/</url>
-          <releases>
-            <enabled>true</enabled>
-          </releases>
-          <snapshots>
-            <enabled>true</enabled>
-          </snapshots>
-        </repository>
-      </repositories>
-      <pluginRepositories>
-        <pluginRepository>
-          <id>iflytek-nexus</id>
-          <url>http://maven.iflytek.com:8081/nexus/content/groups/public</url>
-          <layout>default</layout>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <releases>
-            <updatePolicy>never</updatePolicy>
-          </releases>
-        </pluginRepository>
-      </pluginRepositories>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.3</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>oss</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.5</version>
+            <configuration>
+              <autoVersionSubmodules>true</autoVersionSubmodules>
+              <useReleaseProfile>false</useReleaseProfile>
+              <releaseProfiles>release</releaseProfiles>
+              <goals>deploy</goals>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
-
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven.source.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${javadoc.plugin.version}</version>
+        <configuration>
+          <charset>UTF-8</charset>
+          <encoding>UTF-8</encoding>
+          <additionalparam>-Xdoclint:none</additionalparam>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

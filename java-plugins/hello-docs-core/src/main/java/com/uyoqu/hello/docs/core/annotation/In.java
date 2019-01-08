@@ -2,40 +2,42 @@ package com.uyoqu.hello.docs.core.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * @author yoqu
- * @date 2018/4/18 - 10:51
- */
 
 @Inherited
-@Target({ElementType.TYPE,ElementType.METHOD,ElementType.PARAMETER})
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface In {
 
-    boolean required() default true;
+  boolean required() default true;
 
-    //参数名称
-    String param() default "";
+  /**
+   * @return 参数名称
+   */
+  String param() default "";
 
-    //类型
-    String type() default "String";
+  /**
+   * @return 类型
+   */
+  String type() default "String";
 
-    //描述
-    String desc() default "";
+  /**
+   * @return 描述
+   */
+  String desc() default "";
 
-    //备注
-    String remark() default "";
-    /**
-     * 外链
-     *
-     * @return
-     */
-    String link() default "";
+  /**
+   * @return 备注
+   */
+  String remark() default "";
 
-    /**
-     * 例子
-     * @return
-     */
-    String example() default "";
+  /**
+   * @return 外链
+   */
+  String link() default "";
+
+  /**
+   * @return 例子
+   */
+  String example() default "";
 }
 

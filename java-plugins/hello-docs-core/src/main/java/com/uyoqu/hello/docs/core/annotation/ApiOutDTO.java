@@ -1,9 +1,5 @@
 package com.uyoqu.hello.docs.core.annotation;
 
-/**
- * Created by lanjian
- */
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
@@ -15,16 +11,12 @@ public @interface ApiOutDTO {
     Class clazz();
 
     /**
-     * 返回值是否
-     *
-     * @return
+     * @return 返回值是否
      */
     boolean generics() default false;
 
     /**
-     * 泛型类型.
-     *
-     * @return
+     * @return 泛型类型
      */
     Class genericType() default Object.class;
 }
