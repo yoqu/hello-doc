@@ -65,7 +65,22 @@ pom.xml文件的`plugins`下引入以下配置
             </plugin>
 ```
 
-### 2. java类添加注解
+### 2. 配置解释
+
+`scanPackage`为必填项，需要指定扫描接口的包名，其他均为非必填项目
+
+`appName`为项目名称
+
+`docDirectory` 如果接口有指定api文档，那么将markdown的文档需要放到这个配置项对应的目录
+
+`headers`此项为基础约定的header参数
+
+`resps`为统一返回数据格式
+
+`tips`为基础提示
+
+
+### 3. java类添加注解
 
 1. 在接口类中添加以下注解
 
@@ -151,32 +166,19 @@ public class ApiRet implements Serializable {
 `@ApiGlobalCode`注解内容定义的是`ApiRet`字段变量名字，默认为code和msg
 
 
-### 3.运行插件
+### 4.运行插件
 
 在项目目录下执行命令`mvn clean compile hello-docs:doc`
 
 执行完成后在`target/api-doc`目录下生成了html，打开即可。
 
 
-### 4. spring mvc demo
+### 5. spring mvc demo
 
 demo地址：[spring-mvc](https://github.com/yoqu/spring-cache-demo)
 
 
 ## 字段定义说明
-
-###  maven插件配置
-  `scanPackage`为必填项，需要指定扫描接口的包名，其他均为非必填项目
-  
-  `appName`为项目名称
-  
-  `docDirectory` 如果接口有指定api文档，那么将markdown的文档需要放到这个配置项对应的目录
-  
-  `headers`此项为基础约定的header参数
-  
-  `resps`为统一返回数据格式
-  
-  `tips`为提示
 
 ### 注解
 
@@ -197,6 +199,14 @@ demo地址：[spring-mvc](https://github.com/yoqu/spring-cache-demo)
 
 
 ## FAQ
+
+Q: 多组件的项目可以生成文档吗？
+
+A: 可以，只需要添加该插件的模块在maven依赖有的，就能够支持扫描生成文档，但是需要**注意**的是，使用maven生成需要将其他模块包`install`后再生成
+
+Q: 生成的文档中没有新追加的接口？
+
+A： 可能的原因是依赖的jar包没有更新或当前项目没有compile导致的。
 
 
 ## 项目源码构建
