@@ -174,7 +174,7 @@ public class DocMojo extends AbstractMojo {
           name = name.replaceFirst("static/", "");
           FileUtils.forceMkdir(new File(destDirectory + File.separator + name));
         } else {
-          InputStream stream = this.getClass().getResourceAsStream(File.separator + name);
+          InputStream stream = this.getClass().getResourceAsStream("/" + name);
           ByteArrayOutputStream baos = new ByteArrayOutputStream();
           for (int b = stream.read(); b >= 0; b = stream.read()) {
             baos.write(b);

@@ -35,21 +35,7 @@ public class FileGen extends AbstractScanGen {
   private void writeFile(String path, String filename, String content) throws IOException {
     FileUtils.forceMkdir(new File(path));
     File file = new File(path + "/" + filename);
-    file.delete();
-    FileWriter writer = null;
-    try {
-      writer = new FileWriter(file, false);
-      writer.write(content);
-      writer.flush();
-    } catch (IOException e) {
-      try {
-        if (writer != null)
-          writer.close();
-      } catch (Throwable ignored) {
-
-      }
-      throw e;
-    }
+    FileUtils.writeStringToFile(file,content, "UTF-8");
   }
 
 
