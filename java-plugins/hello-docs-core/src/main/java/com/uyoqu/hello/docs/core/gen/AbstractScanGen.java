@@ -1,7 +1,7 @@
-package com.uyoqu.hello.docs.plugin.gen;
+package com.uyoqu.hello.docs.core.gen;
 
 import com.uyoqu.hello.docs.core.annotation.*;
-import com.uyoqu.hello.docs.plugin.vo.*;
+import com.uyoqu.hello.docs.core.vo.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

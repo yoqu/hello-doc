@@ -1,13 +1,26 @@
-package com.uyoqu.hello.docs.plugin.vo;
+package com.uyoqu.hello.docs.core.vo;
 
 /**
  * Created by zhpeng2 on 2017/9/29.
  */
-public class BasicDefinitionVo {
+public class DtoDataVo {
     private String name;
     private String type;
     private String desc;
     private String remark;
+    private String required;
+    private String link;
+
+    public DtoDataVo() {
+    }
+
+    public DtoDataVo(String name, String type, String desc, String remark, String required) {
+        this.name = name;
+        this.type = type;
+        this.desc = desc;
+        this.remark = remark;
+        this.required = required;
+    }
 
     public String getName() {
         return name;
@@ -39,5 +52,21 @@ public class BasicDefinitionVo {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getRequired() {
+        return required;
+    }
+
+    public void setRequired(String required) {
+        this.required = required;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

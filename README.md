@@ -37,3 +37,7 @@ Link： [详细文档](https://yoqu.gitee.io/hello-doc/#/guide)
 
 
 ## 更新日志
+
+-- 1.0.1
+
+* 修复windows下字符编码的bug

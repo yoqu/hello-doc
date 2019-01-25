@@ -1,11 +1,10 @@
-package com.uyoqu.hello.docs.plugin.gen;
+package com.uyoqu.hello.docs.core.gen;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**

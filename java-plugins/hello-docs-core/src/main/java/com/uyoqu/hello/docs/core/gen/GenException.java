@@ -1,4 +1,4 @@
-package com.uyoqu.hello.docs.plugin.gen;
+package com.uyoqu.hello.docs.core.gen;
 
 /**
  * GEN异常。

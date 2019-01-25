@@ -1,4 +1,4 @@
-package com.uyoqu.hello.docs.plugin.gen;
+package com.uyoqu.hello.docs.core.gen;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

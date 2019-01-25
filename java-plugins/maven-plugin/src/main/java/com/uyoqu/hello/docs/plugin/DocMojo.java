@@ -17,9 +17,9 @@ package com.uyoqu.hello.docs.plugin;
  */
 
 import cn.hutool.core.date.DateUtil;
-import com.uyoqu.hello.docs.plugin.gen.ApiInfo;
-import com.uyoqu.hello.docs.plugin.gen.FileGen;
-import com.uyoqu.hello.docs.plugin.gen.TopGen;
+import com.uyoqu.hello.docs.core.gen.ApiInfo;
+import com.uyoqu.hello.docs.core.gen.FileGen;
+import com.uyoqu.hello.docs.core.gen.TopGen;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;

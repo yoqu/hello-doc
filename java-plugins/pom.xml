@@ -33,6 +33,7 @@
   <modules>
     <module>hello-docs-core</module>
     <module>maven-plugin</module>
+    <module>hello-docs-runner</module>
   </modules>
   <properties>
     <spring.version>4.3.17.RELEASE</spring.version>
