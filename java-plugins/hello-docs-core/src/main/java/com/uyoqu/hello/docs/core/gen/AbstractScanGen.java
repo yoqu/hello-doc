@@ -47,12 +47,32 @@ public abstract class AbstractScanGen implements TopGen {
   protected Map<String, Object> basicMap = new HashMap<String, Object>(); // Key: js file
   protected Map<String, DtoVo> dtoMap = new HashMap<String, DtoVo>(); // // Key: js file
   protected Map<String, ServiceVo> serviceMap = new HashMap<String, ServiceVo>(); // // Key: js file
-
   //基本信息map
   protected ApiInfo basicInfo = new ApiInfo();
 
-  protected String docRoot;
+  public List<TimelineVo> getTimelineList() {
+    return timelineList;
+  }
 
+  public List<MenuGroupVo> getMenuList() {
+    return menuList;
+  }
+
+  public Map<String, Object> getBasicMap() {
+    return basicMap;
+  }
+
+  public Map<String, DtoVo> getDtoMap() {
+    return dtoMap;
+  }
+
+  public Map<String, ServiceVo> getServiceMap() {
+    return serviceMap;
+  }
+
+  public ApiInfo getBasicInfo() {
+    return basicInfo;
+  }
 
   public void scanPakcages(String... packageName) {
     Assert.notEmpty(packageName, "package");
@@ -80,16 +100,36 @@ public abstract class AbstractScanGen implements TopGen {
     }
   }
 
-  public void init(ApiInfo basicInfo, String docDir) {
+  public void init(ApiInfo basicInfo) {
     this.basicInfo = basicInfo;
-    this.docRoot = docDir;
+    initMenu();
+  }
+
+  private void initMenu() {
+    String groupName = "接口服务";
+    MenuGroupVo groupVo = menuTempMap.get(groupName);
+    if (groupVo == null) {
+      groupVo = new MenuGroupVo();
+      groupVo.setSort(1);
+      groupVo.setTitle(groupName);
+      groupVo.setSubs(new ArrayList<MenuVo>());
+      menuTempMap.put(groupName, groupVo);
+    }
+    groupName = "数据结构";
+    MenuGroupVo groupVo2 = menuTempMap.get(groupName);
+    if (groupVo2 == null) {
+      groupVo2 = new MenuGroupVo();
+      groupVo2.setSort(0);
+      groupVo2.setTitle(groupName);
+      groupVo2.setSubs(new ArrayList<MenuVo>());
+      menuTempMap.put(groupName, groupVo2);
+    }
   }
 
 
-  private void check() {
+  protected void check() {
     Assert.notNull(basicInfo, "apiInfo");
     Assert.notNull(basicInfo.getEnName(), "apiInfo enName");
-    Assert.notNull(docRoot, "docRot目录");
   }
 
 
@@ -113,31 +153,22 @@ public abstract class AbstractScanGen implements TopGen {
       resolveTimeline(clazz);
       // 分析接口服务
       resolveService(clazz);
-      //分析服务菜单
-      resolveServiceMenu();
+    }
+    if (basicInfo != null) {//基础信息
+      basicMap.put("basic", basicInfo);
     }
   }
 
-  private void resolveServiceMenu() {
+  private void resolveServiceMenu(ServiceVo serviceVo) {
     String groupName = "接口服务";
     MenuGroupVo groupVo = menuTempMap.get(groupName);
-    if (groupVo == null) {
-      groupVo = new MenuGroupVo();
-      groupVo.setSort(1);
-      groupVo.setTitle(groupName);
-      groupVo.setSubs(new ArrayList<MenuVo>());
-      menuTempMap.put(groupName, groupVo);
-    }
-    for (Map.Entry<String, ServiceVo> entry : serviceMap.entrySet()) {
-      MenuVo vo = new MenuVo();
-      ServiceVo serviceVo = entry.getValue();
-      vo.setTitle(serviceVo.getServiceName());
-      vo.setUrl("/service/" + entry.getKey());
-      vo.setName(serviceVo.getCnName());
-      vo.setGroup(serviceVo.getGroup());
-      vo.setFinish(serviceVo.getFinish());
-      groupVo.getSubs().add(vo);
-    }
+    MenuVo vo = new MenuVo();
+    vo.setTitle(serviceVo.getServiceName());
+    vo.setUrl("/service/" + serviceVo.getServiceFullName());
+    vo.setName(serviceVo.getCnName());
+    vo.setGroup(serviceVo.getGroup());
+    vo.setFinish(serviceVo.getFinish());
+    groupVo.getSubs().add(vo);
   }
 
   public void handler() throws GenException, IOException {
@@ -249,13 +280,6 @@ public abstract class AbstractScanGen implements TopGen {
         ApiDTO ann = clazz.getAnnotation(ApiDTO.class);
         String groupName = "数据结构";
         MenuGroupVo groupVo = menuTempMap.get(groupName);
-        if (groupVo == null) {
-          groupVo = new MenuGroupVo();
-          groupVo.setSort(0);
-          groupVo.setTitle(groupName);
-          groupVo.setSubs(new ArrayList<MenuVo>());
-          menuTempMap.put(groupName, groupVo);
-        }
         MenuVo vo = new MenuVo();
         vo.setTitle(ann.enName());
         vo.setName(ann.cnName());
@@ -377,26 +401,6 @@ public abstract class AbstractScanGen implements TopGen {
     return requestList;
   }
 
-  /**
-   * 处理实体字段
-   */
-  private class DtoFieldCallback implements ReflectionUtils.FieldCallback {
-
-    private List<ServiceDataVo> dataVos = new ArrayList<ServiceDataVo>();
-
-    public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-      ServiceDataVo dataVo = getDataVoByDtoField(field);
-      if (dataVo == null) {
-        return;
-      }
-      dataVos.add(dataVo);
-    }
-
-    public List<ServiceDataVo> getDataVos() {
-      return dataVos;
-    }
-  }
-
   private List<ServiceDataVo> resolveServiceOut(AnnotatedElement element) {
     final List<ServiceDataVo> responseList = new ArrayList<ServiceDataVo>();
     if (element.isAnnotationPresent(ApiOut.class)) {
@@ -465,6 +469,7 @@ public abstract class AbstractScanGen implements TopGen {
         resolveTimeline(clazz, timelines);
         vo.setTimelines(timelines);
         serviceMap.put(vo.getServiceFullName(), vo);
+        resolveServiceMenu(vo);
       }
       String baseUrl = "";
       final RequestMapping mapping = clazz.getAnnotation(RequestMapping.class);
@@ -535,6 +540,7 @@ public abstract class AbstractScanGen implements TopGen {
           List<TimelineVo> timelines = resolveMethodTimeline(method);
           vo.setTimelines(timelines);
           serviceMap.put(vo.getServiceFullName(), vo);
+          resolveServiceMenu(vo);
         }
       });
     } catch (Throwable e) {
@@ -629,7 +635,6 @@ public abstract class AbstractScanGen implements TopGen {
     }
   }
 
-
   private String resolveUrl(Method method) {
     if (method.isAnnotationPresent(ApiGlobalCode.class)) {
       return "/basic-definition";
@@ -672,4 +677,24 @@ public abstract class AbstractScanGen implements TopGen {
   }
 
   public abstract void write();
+
+  /**
+   * 处理实体字段
+   */
+  private class DtoFieldCallback implements ReflectionUtils.FieldCallback {
+
+    private List<ServiceDataVo> dataVos = new ArrayList<ServiceDataVo>();
+
+    public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
+      ServiceDataVo dataVo = getDataVoByDtoField(field);
+      if (dataVo == null) {
+        return;
+      }
+      dataVos.add(dataVo);
+    }
+
+    public List<ServiceDataVo> getDataVos() {
+      return dataVos;
+    }
+  }
 }

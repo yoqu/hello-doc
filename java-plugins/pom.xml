@@ -6,7 +6,7 @@
 
   <groupId>com.uyoqu</groupId>
   <artifactId>doc</artifactId>
-  <version>1.0</version>
+  <version>1.0.1</version>
   <packaging>pom</packaging>
   <name>api-docs</name>
   <description>A simple Api doc generate utils. Help us improve productivity</description>
@@ -40,6 +40,8 @@
     <javadoc.plugin.version>2.9.1</javadoc.plugin.version>
     <maven.source.plugin.version>2.2.1</maven.source.plugin.version>
     <gpg.executable>gpg2</gpg.executable>
+    <java.version>1.8</java.version>
+    <file.encoding>UTF-8</file.encoding>
   </properties>
   <distributionManagement>
     <snapshotRepository>
@@ -78,6 +80,40 @@
               <goals>deploy</goals>
             </configuration>
           </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${javadoc.plugin.version}</version>
+            <configuration>
+              <charset>UTF-8</charset>
+              <encoding>UTF-8</encoding>
+              <additionalparam>-Xdoclint:none</additionalparam>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -94,39 +130,6 @@
             <phase>package</phase>
             <goals>
               <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${javadoc.plugin.version}</version>
-        <configuration>
-          <charset>UTF-8</charset>
-          <encoding>UTF-8</encoding>
-          <additionalparam>-Xdoclint:none</additionalparam>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
             </goals>
           </execution>
         </executions>

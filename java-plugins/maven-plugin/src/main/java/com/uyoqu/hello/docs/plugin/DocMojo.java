@@ -117,9 +117,9 @@ public class DocMojo extends AbstractMojo {
         getLog().info("Hello Doc generation is skipped");
         return;
       }
-      TopGen gen = new FileGen();
       String destDirectory = outputDirectory.getPath() + "/api-doc";
-      gen.init(getAppInfo(), destDirectory);
+      TopGen gen = new FileGen(destDirectory);
+      gen.init(getAppInfo());
       gen.scanPakcages(scanPackage);
       gen.handler();
       //静态资源文件copy
@@ -141,7 +141,7 @@ public class DocMojo extends AbstractMojo {
       .buildTime(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm"));
     if (headers != null) {
       for (Header header : headers) {
-        builder.header(header.getName(), header.getType(), header.getDesc(), header.getRemark(), header.isRequired());
+        builder.header(header.getName(), header.getType(), header.getDesc(), header.getRemark(), header.isRequired(), null);
       }
     }
     if (resps != null) {

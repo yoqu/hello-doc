@@ -135,8 +135,8 @@ public class ApiInfo {
             return this;
         }
 
-        public Builder header(String name, String type, String desc, String remark, boolean required) {
-            DtoDataVo dataVo = new DtoDataVo(name, type, desc, remark, String.valueOf(required));
+        public Builder header(String name, String type, String desc, String remark, boolean required,String example) {
+            DtoDataVo dataVo = new DtoDataVo(name, type, desc, remark, String.valueOf(required),example);
             if (basicInfo.header == null) {
                 basicInfo.header = new ArrayList<DtoDataVo>();
             }

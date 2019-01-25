@@ -19,7 +19,7 @@ import java.util.Map;
  * @email: yoqulin@qq.com
  **/
 @RestController
-@RequestMapping("/hello-doc")
+@RequestMapping("/hello-docs/static/data")
 public class ApiController {
 
   @Autowired(required = false)

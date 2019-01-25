@@ -10,7 +10,7 @@ import java.io.IOException;
 public interface TopGen {
   void scanPakcages(String... packageName);
 
-   void init(ApiInfo basicInfo,String docDir);
+   void init(ApiInfo basicInfo);
 
   void handler() throws GenException, IOException;
 }

@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <version>1.0</version>
+  <version>1.0.1</version>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>hello-docs-plugin</artifactId>
   <packaging>maven-plugin</packaging>
@@ -8,7 +8,7 @@
   <parent>
     <artifactId>doc</artifactId>
     <groupId>com.uyoqu</groupId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <url>http://maven.apache.org</url>
@@ -106,26 +106,33 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.4</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
         <version>3.0</version>
-        <executions>
-        </executions>
         <configuration>
-          <!-- Needed for Java 5 annotation based configuration, for some reason. -->
-          <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+          <source>1.6</source>
+          <target>${java.version}</target>
+          <encoding>${file.encoding}</encoding>
         </configuration>
       </plugin>
-
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-          <!-- 指明编译源代码时使用的字符编码，
-          maven编译的时候默认使用的GBK编码，
-            通过encoding属性设置字符编码，
-            告诉maven这个项目使用UTF-8来编译 -->
-          <encoding>utf8</encoding>
-        </configuration>
+        <artifactId>exec-maven-plugin</artifactId>
+        <groupId>org.codehaus.mojo</groupId>
+        <executions>
+          <execution>
+            <id>build-html</id>
+            <!--<phase>deploy</phase>-->
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>${project.basedir}/build-html.sh</executable>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
