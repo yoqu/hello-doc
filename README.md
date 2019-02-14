@@ -41,3 +41,5 @@ Link： [详细文档](https://yoqu.gitee.io/hello-doc/#/guide)
 -- 1.0.1
 
 * 修复windows下字符编码的bug
+* 增加spring mvc运行时生成文档支持
+* 修复spring mvc下菜单渲染的bug
