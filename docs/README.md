@@ -6,6 +6,7 @@
 
 运行demo：[demo](https://yoqu.gitee.io/hello-doc-demo)
 
+## **快速集成** ：[集成指导](./guide.md)
 
 ## 特性
 * 支持markdown（包含flowchat流程图）
