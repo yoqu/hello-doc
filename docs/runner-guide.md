@@ -49,7 +49,7 @@ public class HelloDocConfiguration {
 
 # 3.运行项目
 
-直接运行集成本模块的项目，打开浏览器，输入`server:port/hello-docs`即可查看文档
+直接运行集成本模块的项目，打开浏览器，输入`server:port/hello-docs/index.html`即可查看文档
 
 
 # 4. 配置解释
