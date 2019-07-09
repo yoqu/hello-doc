@@ -12,6 +12,7 @@ import com.uyoqu.hello.docs.runner.controller.ApiController;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -31,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Data
 @Configuration
+@ComponentScan(basePackages = {"com.uyoqu.hello.docs.runner.controller"})
 public class DocConfigEntity {
     //菜单
     protected List<MenuGroupVo> menuList = new ArrayList<MenuGroupVo>();
@@ -62,11 +64,6 @@ public class DocConfigEntity {
             log.error("hello doc generate fail.");
             throw new RuntimeException(e);
         }
-    }
-
-    @Bean
-    public ApiController controller() {
-        return new ApiController();
     }
 
     @Configuration
