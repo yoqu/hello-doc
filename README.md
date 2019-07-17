@@ -38,6 +38,11 @@ Link： [详细文档](https://yoqu.gitee.io/hello-doc/#/guide)
 
 ## 更新日志
 
+-- 1.0.2
+
+* 修复spring mvc 运行丢失静态页面资源的bug
+* 增加spring mvc 默认路径访问功能
+
 -- 1.0.1
 
 * 修复windows下字符编码的bug

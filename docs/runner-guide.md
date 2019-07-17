@@ -9,7 +9,7 @@ pom.xml文件的追加依赖
         <dependency>
             <groupId>com.uyoqu</groupId>
             <artifactId>docs-runner</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
 ```
 # 2. 新建java的spring配置文件
