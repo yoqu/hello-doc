@@ -3,6 +3,7 @@ package com.uyoqu.hello.docs.core.gen;
 import com.uyoqu.hello.docs.core.annotation.*;
 import com.uyoqu.hello.docs.core.exception.ParameterErrorException;
 import com.uyoqu.hello.docs.core.vo.*;
+import lombok.var;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -379,6 +380,7 @@ public abstract class AbstractScanGen implements TopGen {
   private List<ServiceDataVo> resolveMethodAnnoIn(AnnotatedElement element) {
     // 入参
     final List<ServiceDataVo> requestList = new ArrayList<ServiceDataVo>();
+    var isAdded = false;
     if (element.isAnnotationPresent(ApiIn.class)) {
       ApiIn def = element.getAnnotation(ApiIn.class);
       for (In in : def.value()) {
@@ -391,22 +393,53 @@ public abstract class AbstractScanGen implements TopGen {
         dataVo.setLink(in.link());
         requestList.add(dataVo);
       }
+      isAdded = true;
     }
     //如果没有使用APiIn注解使用了APIInDto的注解
-    if (!element.isAnnotationPresent(ApiIn.class) && element.isAnnotationPresent(ApiInDTO.class)) {
+    if (!isAdded && element.isAnnotationPresent(ApiInDTO.class)) {
       ApiInDTO def = element.getAnnotation(ApiInDTO.class);
-      if (Object.class.equals(def.clazz())) {
-        throw new ParameterErrorException("[ApiInDTO] annotation variable" + element + " clazz property not use default value [Object.class]");
+      readServiceDto(requestList, def.clazz());
+      isAdded = true;
+    }
+    //处理method类型的数据
+    if (!isAdded && element instanceof Method) {
+      Annotation[][] anns = ((Method) element).getParameterAnnotations();
+      Class[] methodCLass = ((Method) element).getParameterTypes();
+      for (int i = 0; i < methodCLass.length; i++) {
+        var isFound = false;
+        for (Annotation a : anns[i]) {
+          if (a.annotationType() == ApiInDTO.class) {
+            readServiceDto(requestList, methodCLass[i]);
+            isFound = true;
+            break;
+          }
+        }
+        if (isFound) {
+          break;
+        }
       }
-      DtoFieldCallback dtoCallBack = new DtoFieldCallback();
-      ReflectionUtils.doWithFields(def.clazz(), dtoCallBack);
-      requestList.addAll(dtoCallBack.getDataVos());
     }
     return requestList;
   }
 
+  /**
+   * 通过注解写入data数据
+   *
+   * @param dataVos
+   * @param clazz2
+   */
+  private void readServiceDto(List<ServiceDataVo> dataVos, Class clazz2) {
+    if (clazz2 == null) {
+      throw new ParameterErrorException("parameter type error.");
+    }
+    DtoFieldCallback dtoCallBack = new DtoFieldCallback();
+    ReflectionUtils.doWithFields(clazz2, dtoCallBack);
+    dataVos.addAll(dtoCallBack.getDataVos());
+  }
+
   private List<ServiceDataVo> resolveServiceOut(AnnotatedElement element) {
     final List<ServiceDataVo> responseList = new ArrayList<ServiceDataVo>();
+    var isAdded = false;
     if (element.isAnnotationPresent(ApiOut.class)) {
       ApiOut def = element.getAnnotation(ApiOut.class);
       for (Out out : def.value()) {
@@ -419,16 +452,16 @@ public abstract class AbstractScanGen implements TopGen {
         dataVo.setLink(out.link());
         responseList.add(dataVo);
       }
+      isAdded = true;
     }
-    //如果没有使用ApiOut注解,使用ApiOutDto注解
-    if (!element.isAnnotationPresent(ApiOut.class) && element.isAnnotationPresent(ApiOutDTO.class)) {
+    if (!isAdded && element.isAnnotationPresent(ApiOutDTO.class)) {
       ApiOutDTO def = element.getAnnotation(ApiOutDTO.class);
-      if (Object.class.equals(def.clazz())) {
-        throw new ParameterErrorException("[ApiOutDTO] annotation variable" + element + " clazz property not use default value [Object.class]");
+      Class clazz = def.clazz();
+      if (clazz == Object.class && element instanceof Method) {//处理空场景
+        clazz = ((Method) element).getReturnType();
       }
-      DtoFieldCallback dtoCallBack = new DtoFieldCallback();
-      ReflectionUtils.doWithFields(def.clazz(), dtoCallBack);
-      responseList.addAll(dtoCallBack.getDataVos());
+      readServiceDto(responseList, clazz);
+      isAdded = true;
     }
     return responseList;
   }
