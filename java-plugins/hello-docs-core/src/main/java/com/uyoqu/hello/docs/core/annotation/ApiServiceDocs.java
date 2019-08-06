@@ -22,7 +22,7 @@ public @interface ApiServiceDocs {
   /**
    * @return 版本号
    */
-  String version();
+  String version() default "1.0";
 
   /**
    * @return 请求方法[GET/POST/PUT/DELETE]

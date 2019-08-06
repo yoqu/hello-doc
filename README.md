@@ -38,6 +38,12 @@ Link： [详细文档](https://yoqu.gitee.io/hello-doc/#/guide)
 
 ## 更新日志
 
+-- 1.0.3-SNAPSHOT
+
+* 允许ApiDto中的enName属性为空，自动获取注解类的属性
+* 优化在线文档的日志消息
+* 优化在spring mvc模式下注解默认参数可允许为空
+
 -- 1.0.2
 
 * 修复spring mvc 运行丢失静态页面资源的bug

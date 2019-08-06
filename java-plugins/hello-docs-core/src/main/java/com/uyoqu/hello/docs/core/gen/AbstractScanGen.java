@@ -1,6 +1,7 @@
 package com.uyoqu.hello.docs.core.gen;
 
 import com.uyoqu.hello.docs.core.annotation.*;
+import com.uyoqu.hello.docs.core.exception.ParameterErrorException;
 import com.uyoqu.hello.docs.core.vo.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -180,7 +181,6 @@ public abstract class AbstractScanGen implements TopGen {
     sort();
     //写入文件
     write();
-    log.info("文件生成成功！");
   }
 
   private void sort() {
@@ -281,7 +281,8 @@ public abstract class AbstractScanGen implements TopGen {
         String groupName = "数据结构";
         MenuGroupVo groupVo = menuTempMap.get(groupName);
         MenuVo vo = new MenuVo();
-        vo.setTitle(ann.enName());
+        String enName = StringUtils.isBlank(ann.enName()) ? clazz.getSimpleName() : ann.enName();
+        vo.setTitle(enName);
         vo.setName(ann.cnName());
         vo.setUrl(resolveUrl(clazz));
         vo.setGroup(ann.group());
@@ -394,6 +395,9 @@ public abstract class AbstractScanGen implements TopGen {
     //如果没有使用APiIn注解使用了APIInDto的注解
     if (!element.isAnnotationPresent(ApiIn.class) && element.isAnnotationPresent(ApiInDTO.class)) {
       ApiInDTO def = element.getAnnotation(ApiInDTO.class);
+      if (Object.class.equals(def.clazz())) {
+        throw new ParameterErrorException("[ApiInDTO] annotation variable" + element + " clazz property not use default value [Object.class]");
+      }
       DtoFieldCallback dtoCallBack = new DtoFieldCallback();
       ReflectionUtils.doWithFields(def.clazz(), dtoCallBack);
       requestList.addAll(dtoCallBack.getDataVos());
@@ -419,6 +423,9 @@ public abstract class AbstractScanGen implements TopGen {
     //如果没有使用ApiOut注解,使用ApiOutDto注解
     if (!element.isAnnotationPresent(ApiOut.class) && element.isAnnotationPresent(ApiOutDTO.class)) {
       ApiOutDTO def = element.getAnnotation(ApiOutDTO.class);
+      if (Object.class.equals(def.clazz())) {
+        throw new ParameterErrorException("[ApiOutDTO] annotation variable" + element + " clazz property not use default value [Object.class]");
+      }
       DtoFieldCallback dtoCallBack = new DtoFieldCallback();
       ReflectionUtils.doWithFields(def.clazz(), dtoCallBack);
       responseList.addAll(dtoCallBack.getDataVos());
@@ -511,6 +518,10 @@ public abstract class AbstractScanGen implements TopGen {
             }
           }
           if (vo.getServiceName() == null) {
+            //fix 首尾连接都无斜杠的情况
+            if (finalBaseUrl.charAt(finalBaseUrl.length() - 1) != '/' && StringUtils.isNotEmpty(url) && url.charAt(0) != '/') {
+              url = "/" + url;
+            }
             vo.setServiceName((finalBaseUrl + url).replaceAll("//", "/"));
           }
           //接口计数.

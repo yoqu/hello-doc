@@ -7,5 +7,5 @@ import java.lang.annotation.RetentionPolicy;
 @java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ApiInDTO {
-    Class clazz();
+    Class clazz() default Object.class;
 }

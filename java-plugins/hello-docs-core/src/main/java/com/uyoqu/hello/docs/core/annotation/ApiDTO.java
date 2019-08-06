@@ -14,7 +14,7 @@ public @interface ApiDTO {
 
     String cnName();
 
-    String enName();
+    String enName() default "";
 
     String desc() default "";
 

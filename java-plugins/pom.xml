@@ -6,7 +6,7 @@
 
   <groupId>com.uyoqu</groupId>
   <artifactId>doc</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3-SNATHOST</version>
   <packaging>pom</packaging>
   <name>api-docs</name>
   <description>A simple Api doc generate utils. Help us improve productivity</description>
