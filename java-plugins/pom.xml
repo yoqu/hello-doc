@@ -6,7 +6,7 @@
 
   <groupId>com.uyoqu</groupId>
   <artifactId>doc</artifactId>
-  <version>1.0.3-SNATHOST</version>
+  <version>1.0.3.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>api-docs</name>
   <description>A simple Api doc generate utils. Help us improve productivity</description>
@@ -32,7 +32,7 @@
   </developers>
   <modules>
     <module>hello-docs-core</module>
-    <module>maven-plugin</module>
+<!--    <module>maven-plugin</module>-->
     <module>hello-docs-runner</module>
   </modules>
   <properties>

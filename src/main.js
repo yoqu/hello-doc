@@ -6,7 +6,6 @@ import App from './App'
 import router from './router'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';    // 使用 CSS
-import { getBasicDefinition } from "@/api/doc";
 import Vuex from 'vuex'
 Vue.use(VueResource);
 Vue.use(iView);
@@ -17,7 +16,8 @@ const store = new Vuex.Store({
     basicInfo: {},
     config: {},
     dto:{},
-    service:{}
+    service:{},
+    firstLoadService:true,//用于修复重复复制的问题
   },
   mutations: {
     setBasicInfo(state, basicInfo) {
@@ -29,6 +29,9 @@ const store = new Vuex.Store({
     setDto(state,dto){
       state.dto = dto
     },
+    firstLoadService(state,fisrtLoad){
+      state.firstLoadService =   fisrtLoad
+    },
     setService(state,service){
       state.service = service
     }
@@ -39,8 +42,8 @@ const store = new Vuex.Store({
 // router.beforeEach((to, from, next) => {
 //   iView.LoadingBar.start();
 //   console.log("start init router.")
-//   if (window.vue == null) {    
-//     getBasicDefinition("").then(response => {      
+//   if (window.vue == null) {
+//     getBasicDefinition("").then(response => {
 //       window.vue.$store.commit("setBasicInfo", response);
 //       document.title = response.basic.name;
 //       console.log("init all configuration")

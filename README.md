@@ -38,6 +38,14 @@ Link： [详细文档](https://yoqu.gitee.io/hello-doc/#/guide)
 
 ## 更新日志
 
+-- 1.0.3.1-SNAPSHOT
+
+* 增加web header参数支持
+* 修复复制service重复提示的问题
+* 增加md文档配置
+* 升级前端框架至最新版本，解决搜索框联想重复问题
+* 优化doc runner的配置方式，让配置更简洁
+
 -- 1.0.3-SNAPSHOT
 
 * 允许ApiDto中的enName属性为空，自动获取注解类的属性

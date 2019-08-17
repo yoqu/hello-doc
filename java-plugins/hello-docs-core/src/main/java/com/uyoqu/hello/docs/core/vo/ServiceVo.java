@@ -1,5 +1,6 @@
 package com.uyoqu.hello.docs.core.vo;
 
+import com.uyoqu.hello.docs.core.annotation.ApiHeader;
 import com.uyoqu.hello.docs.core.annotation.ApiServiceDocs;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class ServiceVo {
   private String method;
   private String group;
   private List<ServiceDataVo> requests;
+  private List<ServiceDataVo> headers;
   private List<ServiceDataVo> responses;
   private List<CodeVo> apiCodes;
   private List<TimelineVo> timelines;
@@ -120,6 +122,14 @@ public class ServiceVo {
 
   public void setRequests(List<ServiceDataVo> requests) {
     this.requests = requests;
+  }
+
+  public List<ServiceDataVo> getHeaders() {
+    return headers;
+  }
+
+  public void setHeaders(List<ServiceDataVo> headers) {
+    this.headers = headers;
   }
 
   public List<ServiceDataVo> getResponses() {
