@@ -1,6 +1,6 @@
 package com.uyoqu.hello.docs.core.vo;
 
-import com.uyoqu.hello.docs.core.annotation.ApiBasicFiled;
+import com.uyoqu.hello.docs.core.annotation.ApiField;
 import com.uyoqu.hello.docs.core.annotation.In;
 import com.uyoqu.hello.docs.core.annotation.Out;
 import lombok.AllArgsConstructor;
@@ -42,7 +42,7 @@ public class ServiceDataVo {
         name = out.param();
     }
 
-    public ServiceDataVo(ApiBasicFiled basicFiled) {
+    public ServiceDataVo(ApiField basicFiled) {
         if (basicFiled == null) {
             return;
         }

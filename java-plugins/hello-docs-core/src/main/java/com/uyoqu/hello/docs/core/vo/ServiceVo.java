@@ -1,7 +1,6 @@
 package com.uyoqu.hello.docs.core.vo;
 
-import com.uyoqu.hello.docs.core.annotation.ApiHeader;
-import com.uyoqu.hello.docs.core.annotation.ApiServiceDocs;
+import com.uyoqu.hello.docs.core.annotation.ApiService;
 
 import java.util.List;
 
@@ -43,13 +42,13 @@ public class ServiceVo {
   public ServiceVo() {
   }
 
-  public ServiceVo(ApiServiceDocs apiServiceDocs) {
-    this.cnName = apiServiceDocs.cnName();
-    this.desc = apiServiceDocs.desc();
-    this.version = apiServiceDocs.version();
-    this.group = apiServiceDocs.group();
-    this.doc = apiServiceDocs.doc();
-    this.finish = apiServiceDocs.finish();
+  public ServiceVo(ApiService apiService) {
+    this.cnName = apiService.cnName();
+    this.desc = apiService.desc();
+    this.version = apiService.version();
+    this.group = apiService.group();
+    this.doc = apiService.doc();
+    this.finish = apiService.finish();
   }
 
   public int getFinish() {

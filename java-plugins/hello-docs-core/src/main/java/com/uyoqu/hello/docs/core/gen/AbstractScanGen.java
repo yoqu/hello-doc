@@ -1,9 +1,9 @@
 package com.uyoqu.hello.docs.core.gen;
 
-import com.uyoqu.hello.docs.core.annotation.ApiBasicFiled;
 import com.uyoqu.hello.docs.core.annotation.ApiCode;
 import com.uyoqu.hello.docs.core.annotation.ApiCodes;
 import com.uyoqu.hello.docs.core.annotation.ApiDTO;
+import com.uyoqu.hello.docs.core.annotation.ApiField;
 import com.uyoqu.hello.docs.core.annotation.ApiGlobalCode;
 import com.uyoqu.hello.docs.core.annotation.ApiHeader;
 import com.uyoqu.hello.docs.core.annotation.ApiHeaders;
@@ -11,7 +11,7 @@ import com.uyoqu.hello.docs.core.annotation.ApiIn;
 import com.uyoqu.hello.docs.core.annotation.ApiInDTO;
 import com.uyoqu.hello.docs.core.annotation.ApiOut;
 import com.uyoqu.hello.docs.core.annotation.ApiOutDTO;
-import com.uyoqu.hello.docs.core.annotation.ApiServiceDocs;
+import com.uyoqu.hello.docs.core.annotation.ApiService;
 import com.uyoqu.hello.docs.core.annotation.ApiTimeline;
 import com.uyoqu.hello.docs.core.annotation.In;
 import com.uyoqu.hello.docs.core.annotation.Out;
@@ -44,17 +44,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,6 +65,7 @@ import java.util.Set;
  * @date: 2018/10/18
  * @email: yoqulin@qq.com
  **/
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractScanGen implements TopGen {
 
 
@@ -76,17 +75,17 @@ public abstract class AbstractScanGen implements TopGen {
     protected static final int NEW_TIMELINE_DAY = 7;
 
     // 待处理的类
-    protected Set<Class<?>> basicSet = new HashSet<Class<?>>();
-    protected Set<Class<?>> dtoSet = new HashSet<Class<?>>();
-    protected Set<Class<?>> serviceSet = new HashSet<Class<?>>();
+    protected Set<Class<?>> basicSet = new HashSet<>();
+    protected Set<Class<?>> dtoSet = new HashSet<>();
+    protected Set<Class<?>> serviceSet = new HashSet<>();
 
     // 结果集
-    protected List<TimelineVo> timelineList = new ArrayList<TimelineVo>();
-    protected Map<String, MenuGroupVo> menuTempMap = new HashMap<String, MenuGroupVo>(); // Key: 分组名称
-    protected List<MenuGroupVo> menuList = new ArrayList<MenuGroupVo>();
-    protected Map<String, Object> basicMap = new HashMap<String, Object>(); // Key: js file
-    protected Map<String, DtoVo> dtoMap = new HashMap<String, DtoVo>(); // // Key: js file
-    protected Map<String, ServiceVo> serviceMap = new HashMap<String, ServiceVo>(); // // Key: js file
+    protected List<TimelineVo> timelineList = new ArrayList<>();
+    protected Map<String, MenuGroupVo> menuTempMap = new HashMap<>(); // Key: 分组名称
+    protected List<MenuGroupVo> menuList = new ArrayList<>();
+    protected Map<String, Object> basicMap = new HashMap<>(); // Key: js file
+    protected Map<String, DtoVo> dtoMap = new HashMap<>(); // // Key: js file
+    protected Map<String, ServiceVo> serviceMap = new HashMap<>(); // // Key: js file
     //基本信息map
     protected ApiInfo basicInfo = new ApiInfo();
 
@@ -130,7 +129,7 @@ public abstract class AbstractScanGen implements TopGen {
                 dtoSet.addAll(set);
             }
             // 描述service
-            scan = new ScanWrapper(packageName, ApiServiceDocs.class, Controller.class, RestController.class);
+            scan = new ScanWrapper(packageName, ApiService.class, Controller.class, RestController.class);
             set = scan.getClassSet();
             if (set != null) {
                 serviceSet.addAll(set);
@@ -152,7 +151,7 @@ public abstract class AbstractScanGen implements TopGen {
             groupVo = new MenuGroupVo();
             groupVo.setSort(1);
             groupVo.setTitle(groupName);
-            groupVo.setSubs(new ArrayList<MenuVo>());
+            groupVo.setSubs(new ArrayList<>());
             menuTempMap.put(groupName, groupVo);
         }
         groupName = "数据结构";
@@ -161,7 +160,7 @@ public abstract class AbstractScanGen implements TopGen {
             groupVo2 = new MenuGroupVo();
             groupVo2.setSort(0);
             groupVo2.setTitle(groupName);
-            groupVo2.setSubs(new ArrayList<MenuVo>());
+            groupVo2.setSubs(new ArrayList<>());
             menuTempMap.put(groupName, groupVo2);
         }
     }
@@ -211,7 +210,7 @@ public abstract class AbstractScanGen implements TopGen {
         groupVo.getSubs().add(vo);
     }
 
-    public void handler() throws GenException, IOException {
+    public void handler() throws GenException {
         //检查输入的参数是否都有了
         check();
         // 分析
@@ -225,30 +224,26 @@ public abstract class AbstractScanGen implements TopGen {
     private void sort() {
         // 菜单排序
         for (Map.Entry<String, MenuGroupVo> vo : menuTempMap.entrySet()) {
-            Collections.sort(vo.getValue().getSubs(), new Comparator<MenuVo>() {
-                public int compare(MenuVo o1, MenuVo o2) {
-                    if (o1 == null && o2 == null)
-                        return 0;
-                    else if (o1 == null)
-                        return 1;
-                    else if (o2 == null)
-                        return -1;
-                    return ObjectUtils.compare(o1.getTitle(), o2.getTitle());
-                }
+            vo.getValue().getSubs().sort((o1, o2) -> {
+                if (o1 == null && o2 == null)
+                    return 0;
+                else if (o1 == null)
+                    return 1;
+                else if (o2 == null)
+                    return -1;
+                return ObjectUtils.compare(o1.getTitle(), o2.getTitle());
             });
             // 复制到列表
             menuList.add(vo.getValue());
             // 列表排序
-            Collections.sort(menuList, new Comparator<MenuGroupVo>() {
-                public int compare(MenuGroupVo o1, MenuGroupVo o2) {
-                    if (o1 == null && o2 == null)
-                        return 0;
-                    else if (o1 == null)
-                        return 1;
-                    else if (o2 == null)
-                        return -1;
-                    return ObjectUtils.compare(o1.getSort(), o2.getSort());
-                }
+            menuList.sort((o1, o2) -> {
+                if (o1 == null && o2 == null)
+                    return 0;
+                else if (o1 == null)
+                    return 1;
+                else if (o2 == null)
+                    return -1;
+                return ObjectUtils.compare(o1.getSort(), o2.getSort());
             });
         }
     }
@@ -259,12 +254,12 @@ public abstract class AbstractScanGen implements TopGen {
 
 
     private List<TimelineVo> resolveMethodTimeline(Method method) {
-        final List<TimelineVo> timelineVos = new ArrayList<TimelineVo>();
+        final List<TimelineVo> timelineVos = new ArrayList<>();
         if (!method.isAnnotationPresent(ApiTimeline.class)) {
             return timelineVos;
         }
         ApiTimeline ann = method.getAnnotation(ApiTimeline.class);
-        if (ann == null || ann.value() == null || ann.value().length == 0)
+        if (ann == null || ann.value().length == 0)
             return timelineVos;
         for (Timeline timeline : ann.value()) {
             TimelineVo vo = new TimelineVo(timeline);
@@ -279,7 +274,7 @@ public abstract class AbstractScanGen implements TopGen {
         try {
             if (clazz.isAnnotationPresent(ApiTimeline.class)) {
                 ApiTimeline ann = clazz.getAnnotation(ApiTimeline.class);
-                if (ann == null || ann.value() == null || ann.value().length == 0)
+                if (ann == null || ann.value().length == 0)
                     return;
                 for (Timeline timeline : ann.value()) {
                     TimelineVo vo = new TimelineVo(timeline);
@@ -287,28 +282,22 @@ public abstract class AbstractScanGen implements TopGen {
                     list.add(vo);
                 }
             } else if (clazz.isAnnotationPresent(Controller.class) || clazz.isAnnotationPresent(RestController.class)) {
-                final List<TimelineVo> timelineVos = new ArrayList<TimelineVo>();
-                ReflectionUtils.doWithMethods(clazz, new ReflectionUtils.MethodCallback() {
-                    public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-                        timelineVos.addAll(resolveMethodTimeline(method));
-                    }
-                });
+                final List<TimelineVo> timelineVos = new ArrayList<>();
+                ReflectionUtils.doWithMethods(clazz, method -> timelineVos.addAll(resolveMethodTimeline(method)));
                 list.addAll(timelineVos);
             }
         } catch (Throwable e) {
             throw new GenException("分析时间轴异常，", clazz, e);
         } finally {
             // 时间轴排序
-            Collections.sort(list, new Comparator<TimelineVo>() {
-                public int compare(TimelineVo o1, TimelineVo o2) {
-                    if (o1 == null && o2 == null)
-                        return 0;
-                    else if (o1 == null)
-                        return 1;
-                    else if (o2 == null)
-                        return -1;
-                    return ObjectUtils.compare(o2.getTime(), o1.getTime());
-                }
+            list.sort((o1, o2) -> {
+                if (o1 == null && o2 == null)
+                    return 0;
+                else if (o1 == null)
+                    return 1;
+                else if (o2 == null)
+                    return -1;
+                return ObjectUtils.compare(o2.getTime(), o1.getTime());
             });
         }
     }
@@ -339,13 +328,12 @@ public abstract class AbstractScanGen implements TopGen {
                 return;
 
             ApiGlobalCode ann = clazz.getAnnotation(ApiGlobalCode.class);
-            List<CodeVo> voList = new ArrayList<CodeVo>();
+            List<CodeVo> voList = new ArrayList<>();
             basicMap.put("code", voList);
 
             Field[] fields = clazz.getDeclaredFields();
-            if (fields == null || fields.length == 0)
+            if (fields.length == 0)
                 return;
-
             for (Field field : fields) {
                 CodeVo vo = new CodeVo();
                 Object obj = field.get(field.getName());
@@ -371,36 +359,34 @@ public abstract class AbstractScanGen implements TopGen {
             vo.setDesc(ann.desc());
             vo.setDoc(ann.doc());
             // 字段
-            final List<DtoDataVo> dataList = new ArrayList<DtoDataVo>();
+            final List<DtoDataVo> dataList = new ArrayList<>();
             vo.setData(dataList);
-            ReflectionUtils.doWithFields(clazz, new ReflectionUtils.FieldCallback() {
-                public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                    if (!field.isAnnotationPresent(ApiBasicFiled.class))
-                        return;
-                    ApiBasicFiled def = field.getAnnotation(ApiBasicFiled.class);
-                    if (def == null) {
-                        return;
-                    }
-                    DtoDataVo dataVo = new DtoDataVo();
-                    if (StringUtils.isNotBlank(def.param())) {
-                        dataVo.setName(def.param());
-                    } else {
-                        dataVo.setName(field.getName());
-                    }
-                    if (StringUtils.isNotBlank(def.type())) {
-                        dataVo.setType(def.type());
-                    } else {
-                        dataVo.setType(field.getType().getSimpleName());
-                    }
-                    dataVo.setDesc(def.desc());
-                    dataVo.setRemark(def.remark());
-                    dataVo.setRequired(String.valueOf(def.required()));
-                    dataVo.setLink(def.link());
-                    dataList.add(dataVo);
+            ReflectionUtils.doWithFields(clazz, field -> {
+                if (!field.isAnnotationPresent(ApiField.class))
+                    return;
+                ApiField def = field.getAnnotation(ApiField.class);
+                if (def == null) {
+                    return;
                 }
+                DtoDataVo dataVo = new DtoDataVo();
+                if (StringUtils.isNotBlank(def.param())) {
+                    dataVo.setName(def.param());
+                } else {
+                    dataVo.setName(field.getName());
+                }
+                if (StringUtils.isNotBlank(def.type())) {
+                    dataVo.setType(def.type());
+                } else {
+                    dataVo.setType(field.getType().getSimpleName());
+                }
+                dataVo.setDesc(def.desc());
+                dataVo.setRemark(def.remark());
+                dataVo.setRequired(String.valueOf(def.required()));
+                dataVo.setLink(def.link());
+                dataList.add(dataVo);
             });
             // 时间轴
-            List<TimelineVo> timelines = new ArrayList<TimelineVo>();
+            List<TimelineVo> timelines = new ArrayList<>();
             resolveTimeline(clazz, timelines);
             vo.setTimelines(timelines);
             dtoMap.put(StringUtils.isNotBlank(ann.enName()) ? ann.enName() : clazz.getSimpleName(), vo);
@@ -409,8 +395,8 @@ public abstract class AbstractScanGen implements TopGen {
         }
     }
 
-    public List<ServiceDataVo> resolveMethodHeaderAnno(Method method) {
-        final List<ServiceDataVo> headerList = new ArrayList<ServiceDataVo>();
+    private List<ServiceDataVo> resolveMethodHeaderAnno(Method method) {
+        final List<ServiceDataVo> headerList = new ArrayList<>();
         Annotation[][] anns = method.getParameterAnnotations();
         Class[] methodCLass = method.getParameterTypes();
         for (int i = 0; i < methodCLass.length; i++) {
@@ -433,30 +419,27 @@ public abstract class AbstractScanGen implements TopGen {
                 headerList.add(dataVo);
             }
         }
+        ApiHeaders apiHeaders = method.getAnnotation(ApiHeaders.class);
+        if (apiHeaders != null && apiHeaders.value().length > 0) {
+            for (ApiHeader header : apiHeaders.value()) {
+                ServiceDataVo dataVo = ServiceDataVo.builder().desc(header.desc()).name(header.name()).type(header.type()).required(String.valueOf(header.required())).build();
+                headerList.add(dataVo);
+            }
+        }
         return headerList;
     }
 
     /**
      * 处理方法上的注解
-     *
-     * @param element
-     * @param isRest
-     * @return
      */
     private List<ServiceDataVo> resolveMethodAnnoIn(AnnotatedElement element, boolean isRest) {
         // 入参
-        final List<ServiceDataVo> requestList = new ArrayList<ServiceDataVo>();
+        final List<ServiceDataVo> requestList = new ArrayList<>();
         var isAdded = false;
         if (element.isAnnotationPresent(ApiIn.class)) {
             ApiIn def = element.getAnnotation(ApiIn.class);
             for (In in : def.value()) {
-                ServiceDataVo dataVo = new ServiceDataVo();
-                dataVo.setRequired(String.valueOf(in.required()));
-                dataVo.setName(in.param());
-                dataVo.setType(in.type());
-                dataVo.setDesc(in.desc());
-                dataVo.setRemark(in.remark());
-                dataVo.setLink(in.link());
+                ServiceDataVo dataVo = new ServiceDataVo(in);
                 requestList.add(dataVo);
             }
             isAdded = true;
@@ -469,22 +452,13 @@ public abstract class AbstractScanGen implements TopGen {
         }
         //处理method类型的数据
         if (!isAdded && element instanceof Method) {
-            Annotation[][] anns = ((Method) element).getParameterAnnotations();
-            Class[] methodCLass = ((Method) element).getParameterTypes();
-            for (int i = 0; i < methodCLass.length; i++) {
-                var isFound = false;
-                if(isRest && methodCLass[i].isAnnotationPresent(ApiDTO.class)){
-                    readServiceDto(requestList, methodCLass[i], null);
+            for (Parameter parameter : ((Method) element).getParameters()) {
+                if (parameter.isAnnotationPresent(ApiInDTO.class)) {
+                    readServiceDto(requestList, parameter, parameter.getAnnotation(ApiInDTO.class).groups());
                     break;
                 }
-                for (Annotation a : anns[i]) {
-                    if (a.annotationType() == ApiInDTO.class) {
-                        readServiceDto(requestList, methodCLass[i], ((ApiInDTO) a).groups());
-                        isFound = true;
-                        break;
-                    }
-                }
-                if (isFound) {
+                if (isRest && parameter.getType().isAnnotationPresent(ApiDTO.class)) {
+                    readServiceDto(requestList, parameter, null);
                     break;
                 }
             }
@@ -494,9 +468,6 @@ public abstract class AbstractScanGen implements TopGen {
 
     /**
      * 通过注解写入data数据
-     *
-     * @param dataVos
-     * @param clazz2
      */
     private void readServiceDto(List<ServiceDataVo> dataVos, Class clazz2, Class<? extends Annotation>[] groups) {
         if (clazz2 == null) {
@@ -507,19 +478,28 @@ public abstract class AbstractScanGen implements TopGen {
         dataVos.addAll(dtoCallBack.getDataVos());
     }
 
+    /**
+     * 通过注解写入data数据
+     */
+    private void readServiceDto(List<ServiceDataVo> dataVos, Parameter parameter, Class<? extends Annotation>[] groups) {
+        Class clazz2 = parameter.getType();
+        if (clazz2 == null) {
+            throw new ParameterErrorException("parameter type error.");
+        }
+        if (String.class.isAssignableFrom(clazz2) || clazz2.isPrimitive()) {//处理方法的基础类型
+            dataVos.add(new ServiceDataVo(parameter.getName(), clazz2.getSimpleName(), "", "true", "", "", null));
+            return;
+        }
+        readServiceDto(dataVos, clazz2, groups);
+    }
+
     private List<ServiceDataVo> resolveServiceOut(AnnotatedElement element) {
-        final List<ServiceDataVo> responseList = new ArrayList<ServiceDataVo>();
+        final List<ServiceDataVo> responseList = new ArrayList<>();
         var isAdded = false;
         if (element.isAnnotationPresent(ApiOut.class)) {
             ApiOut def = element.getAnnotation(ApiOut.class);
             for (Out out : def.value()) {
-                ServiceDataVo dataVo = new ServiceDataVo();
-                dataVo.setRequired(String.valueOf(out.required()));
-                dataVo.setName(out.param());
-                dataVo.setType(out.type());
-                dataVo.setDesc(out.desc());
-                dataVo.setRemark(out.remark());
-                dataVo.setLink(out.link());
+                ServiceDataVo dataVo = new ServiceDataVo(out);
                 responseList.add(dataVo);
             }
             isAdded = true;
@@ -531,13 +511,12 @@ public abstract class AbstractScanGen implements TopGen {
                 clazz = ((Method) element).getReturnType();
             }
             readServiceDto(responseList, clazz, def.groups());
-            isAdded = true;
         }
         return responseList;
     }
 
     private List<ServiceDataVo> resolveServiceHeaders(AnnotatedElement element) {
-        final List<ServiceDataVo> headerVos = new ArrayList<ServiceDataVo>();
+        final List<ServiceDataVo> headerVos = new ArrayList<>();
         if (element.isAnnotationPresent(ApiHeaders.class)) {
             ApiHeaders def = element.getAnnotation(ApiHeaders.class);
             for (ApiHeader header : def.value()) {
@@ -554,7 +533,7 @@ public abstract class AbstractScanGen implements TopGen {
 
     private List<CodeVo> resolveCodes(AnnotatedElement element) {
         if (element.isAnnotationPresent(ApiCodes.class)) {
-            List<CodeVo> codeVos = new ArrayList<CodeVo>();
+            List<CodeVo> codeVos = new ArrayList<>();
             ApiCodes def = element.getAnnotation(ApiCodes.class);
             for (ApiCode code : def.value()) {
                 CodeVo codeVo = new CodeVo();
@@ -569,8 +548,8 @@ public abstract class AbstractScanGen implements TopGen {
 
     private void resolveService(final Class<?> clazz) throws GenException {
         try {
-            if (clazz.isAnnotationPresent(ApiServiceDocs.class)) {
-                ApiServiceDocs ann = clazz.getAnnotation(ApiServiceDocs.class);
+            if (clazz.isAnnotationPresent(ApiService.class)) {
+                ApiService ann = clazz.getAnnotation(ApiService.class);
                 ServiceVo vo = new ServiceVo(ann);
                 vo.setCnName(ann.cnName());
                 if (StringUtils.isBlank(ann.serviceName())) {
@@ -592,7 +571,7 @@ public abstract class AbstractScanGen implements TopGen {
                 vo.setApiCodes(resolveCodes(clazz));
                 vo.setHeaders(resolveServiceHeaders(clazz));
                 // 时间轴
-                List<TimelineVo> timelines = new ArrayList<TimelineVo>();
+                List<TimelineVo> timelines = new ArrayList<>();
                 resolveTimeline(clazz, timelines);
                 vo.setTimelines(timelines);
                 serviceMap.put(vo.getServiceFullName(), vo);
@@ -604,86 +583,84 @@ public abstract class AbstractScanGen implements TopGen {
                 baseUrl = mapping.value()[0];
             }
             final String finalBaseUrl = baseUrl;
-            ReflectionUtils.doWithMethods(clazz, new ReflectionUtils.MethodCallback() {
-                public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-                    ApiServiceDocs apiServiceDocs = method.getAnnotation(ApiServiceDocs.class);
-                    if (apiServiceDocs == null) {
-                        return;
-                    }
-                    ServiceVo vo = new ServiceVo(apiServiceDocs);
-                    vo.setServiceFullName(clazz.getName() + "." + method.getName());
-                    String url = "";
-                    boolean isRest = false;//如果是rest请求进行
-                    if (clazz.isAnnotationPresent(RestController.class)) {
-                        isRest = true;
-                    }
-                    if (method.getAnnotatedReturnType().isAnnotationPresent(ResponseBody.class)) {
-                        isRest = true;
-                    }
-                    if (method.isAnnotationPresent(RequestMapping.class)) {
-                        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
-                        url = requestMapping.value()[0];
-                        String requestMethodNames = StringUtils.join(requestMapping.method(), ",");
-                        vo.setMethod(requestMethodNames);
-                    } else if (method.isAnnotationPresent(GetMapping.class)) {
-                        url = method.getAnnotation(GetMapping.class).value()[0];
-                        vo.setMethod("GET");
-                    } else if (method.isAnnotationPresent(PostMapping.class)) {
-                        url = method.getAnnotation(PostMapping.class).value()[0];
-                        vo.setMethod("POST");
-                    } else if (method.isAnnotationPresent(PutMapping.class)) {
-                        url = method.getAnnotation(PutMapping.class).value()[0];
-                        vo.setMethod("PUT");
-                    } else if (method.isAnnotationPresent(DeleteMapping.class)) {
-                        url = method.getAnnotation(DeleteMapping.class).value()[0];
-                        vo.setMethod("PUT");
-                    } else {
-                        if (StringUtils.isBlank(apiServiceDocs.serviceName())) {
-                            vo.setServiceName(clazz.getName() + "." + method.getName());
-                        } else {
-                            vo.setServiceName(apiServiceDocs.serviceName().replaceAll("/", "."));
-                        }
-                    }
-                    if (vo.getServiceName() == null) {
-                        //fix 首尾连接都无斜杠的情况
-                        if (finalBaseUrl.charAt(finalBaseUrl.length() - 1) != '/' && StringUtils.isNotEmpty(url) && url.charAt(0) != '/') {
-                            url = "/" + url;
-                        }
-                        vo.setServiceName((finalBaseUrl + url).replaceAll("//", "/"));
-                    }
-                    //接口计数.
-                    basicInfo.setIncCount(basicInfo.getIncCount() + 1);
-                    if (apiServiceDocs.finish() == 100) {
-                        basicInfo.setFinishCount(basicInfo.getFinishCount() + 1);
-                    }
-                    //入参
-                    List<ServiceDataVo> ins = resolveMethodAnnoIn(method, isRest);
-                    if (!CollectionUtils.isEmpty(ins)) {
-                        vo.setRequests(ins);
-                    } else {
-                        List<ServiceDataVo> in = resolveMethodParameterAnnoIn(method);
-                        vo.setRequests(in);
-                    }
-                    // 出参
-                    if (isRest && method.getReturnType().isAnnotationPresent(ApiDTO.class)) {
-                        DtoFieldCallback dtoCallBack = new DtoFieldCallback(null);
-                        ReflectionUtils.doWithFields(method.getReturnType(), dtoCallBack);
-                        vo.setResponses(dtoCallBack.getDataVos());
-                    } else {
-                        vo.setResponses(resolveServiceOut(method));
-                    }
-                    if (vo.getHeaders() == null || vo.getHeaders().isEmpty()) {
-                        List<ServiceDataVo> headers = resolveMethodHeaderAnno(method);
-                        vo.setHeaders(headers);
-                    }
-                    //返回码
-                    vo.setApiCodes(resolveCodes(method));
-                    // 时间轴
-                    List<TimelineVo> timelines = resolveMethodTimeline(method);
-                    vo.setTimelines(timelines);
-                    serviceMap.put(vo.getServiceFullName(), vo);
-                    resolveServiceMenu(vo);
+            ReflectionUtils.doWithMethods(clazz, method -> {
+                ApiService apiService = method.getAnnotation(ApiService.class);
+                if (apiService == null) {
+                    return;
                 }
+                ServiceVo vo = new ServiceVo(apiService);
+                vo.setServiceFullName(clazz.getName() + "." + method.getName());
+                String url = "";
+                boolean isRest = false;//如果是rest请求进行
+                if (clazz.isAnnotationPresent(RestController.class)) {
+                    isRest = true;
+                }
+                if (method.getAnnotatedReturnType().isAnnotationPresent(ResponseBody.class)) {
+                    isRest = true;
+                }
+                if (method.isAnnotationPresent(RequestMapping.class)) {
+                    RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+                    url = requestMapping.value()[0];
+                    String requestMethodNames = StringUtils.join(requestMapping.method(), ",");
+                    vo.setMethod(requestMethodNames);
+                } else if (method.isAnnotationPresent(GetMapping.class)) {
+                    url = method.getAnnotation(GetMapping.class).value()[0];
+                    vo.setMethod("GET");
+                } else if (method.isAnnotationPresent(PostMapping.class)) {
+                    url = method.getAnnotation(PostMapping.class).value()[0];
+                    vo.setMethod("POST");
+                } else if (method.isAnnotationPresent(PutMapping.class)) {
+                    url = method.getAnnotation(PutMapping.class).value()[0];
+                    vo.setMethod("PUT");
+                } else if (method.isAnnotationPresent(DeleteMapping.class)) {
+                    url = method.getAnnotation(DeleteMapping.class).value()[0];
+                    vo.setMethod("PUT");
+                } else {
+                    if (StringUtils.isBlank(apiService.serviceName())) {
+                        vo.setServiceName(clazz.getName() + "." + method.getName());
+                    } else {
+                        vo.setServiceName(apiService.serviceName().replaceAll("/", "."));
+                    }
+                }
+                if (vo.getServiceName() == null) {
+                    //fix 首尾连接都无斜杠的情况
+                    if (finalBaseUrl.charAt(finalBaseUrl.length() - 1) != '/' && StringUtils.isNotEmpty(url) && url.charAt(0) != '/') {
+                        url = "/" + url;
+                    }
+                    vo.setServiceName((finalBaseUrl + url).replaceAll("//", "/"));
+                }
+                //接口计数.
+                basicInfo.setIncCount(basicInfo.getIncCount() + 1);
+                if (apiService.finish() == 100) {
+                    basicInfo.setFinishCount(basicInfo.getFinishCount() + 1);
+                }
+                //入参
+                List<ServiceDataVo> ins = resolveMethodAnnoIn(method, isRest);
+                if (!CollectionUtils.isEmpty(ins)) {
+                    vo.setRequests(ins);
+                } else {
+                    List<ServiceDataVo> in = resolveMethodParameterAnnoIn(method);
+                    vo.setRequests(in);
+                }
+                // 出参
+                if (isRest && method.getReturnType().isAnnotationPresent(ApiDTO.class)) {
+                    DtoFieldCallback dtoCallBack = new DtoFieldCallback(null);
+                    ReflectionUtils.doWithFields(method.getReturnType(), dtoCallBack);
+                    vo.setResponses(dtoCallBack.getDataVos());
+                } else {
+                    vo.setResponses(resolveServiceOut(method));
+                }
+                if (vo.getHeaders() == null || vo.getHeaders().isEmpty()) {
+                    List<ServiceDataVo> headers = resolveMethodHeaderAnno(method);
+                    vo.setHeaders(headers);
+                }
+                //返回码
+                vo.setApiCodes(resolveCodes(method));
+                // 时间轴
+                List<TimelineVo> timelines = resolveMethodTimeline(method);
+                vo.setTimelines(timelines);
+                serviceMap.put(vo.getServiceFullName(), vo);
+                resolveServiceMenu(vo);
             });
         } catch (Throwable e) {
             throw new GenException("分析接口服务异常，", clazz, e);
@@ -692,12 +669,9 @@ public abstract class AbstractScanGen implements TopGen {
 
     /**
      * 处理方法参数注解
-     *
-     * @param method
-     * @return
      */
     private List<ServiceDataVo> resolveMethodParameterAnnoIn(Method method) {
-        List<ServiceDataVo> in = new ArrayList<ServiceDataVo>();
+        List<ServiceDataVo> in = new ArrayList<>();
         int i = 0;
         LocalVariableTableParameterNameDiscoverer u = new LocalVariableTableParameterNameDiscoverer();
         String[] names = u.getParameterNames(method);
@@ -735,12 +709,9 @@ public abstract class AbstractScanGen implements TopGen {
 
     /**
      * 功过字段注解生成serviceDataVo实体
-     *
-     * @param f
-     * @return
      */
     private ServiceDataVo getDataVoByDtoField(Field f) {
-        ApiBasicFiled basicField = f.getAnnotation(ApiBasicFiled.class);
+        ApiField basicField = f.getAnnotation(ApiField.class);
         if (basicField == null) {
             return null;
         }
@@ -769,8 +740,8 @@ public abstract class AbstractScanGen implements TopGen {
         } else if (clazz.isAnnotationPresent(ApiDTO.class)) {
             ApiDTO ann = clazz.getAnnotation(ApiDTO.class);
             return "/dto/" + (StringUtils.isNotBlank(ann.enName()) ? ann.enName() : clazz.getSimpleName());
-        } else if (clazz.isAnnotationPresent(ApiServiceDocs.class)) {
-            ApiServiceDocs ann = clazz.getAnnotation(ApiServiceDocs.class);
+        } else if (clazz.isAnnotationPresent(ApiService.class)) {
+            ApiService ann = clazz.getAnnotation(ApiService.class);
             return "/service/" + (StringUtils.isBlank(ann.serviceName()) ? clazz.getName() : ann.serviceName().replaceAll("/", ".")) + "_" + ann.version();
         } else {
             return "";
@@ -783,8 +754,8 @@ public abstract class AbstractScanGen implements TopGen {
         } else if (method.isAnnotationPresent(ApiDTO.class)) {
             ApiDTO ann = method.getAnnotation(ApiDTO.class);
             return "/dto/" + (StringUtils.isNotBlank(ann.enName()) ? ann.enName() : method.getName());
-        } else if (method.isAnnotationPresent(ApiServiceDocs.class)) {
-            ApiServiceDocs ann = method.getAnnotation(ApiServiceDocs.class);
+        } else if (method.isAnnotationPresent(ApiService.class)) {
+            ApiService ann = method.getAnnotation(ApiService.class);
             return "/service/" + (StringUtils.isBlank(ann.serviceName()) ? method.getName() : ann.serviceName().replaceAll("/", ".")) + "_" + ann.version();
         } else {
             return "";
@@ -803,7 +774,7 @@ public abstract class AbstractScanGen implements TopGen {
     }
 
     private String resolveIsNew(ApiTimeline ann) throws ParseException {
-        if (ann == null || ann.value() == null || ann.value().length == 0)
+        if (ann == null || ann.value().length == 0)
             return "";
         for (Timeline timeline : ann.value()) {
             Date date = TIMELINE_SDF.parse(timeline.time());
@@ -825,9 +796,9 @@ public abstract class AbstractScanGen implements TopGen {
      */
     private class DtoFieldCallback implements ReflectionUtils.FieldCallback {
         Class<? extends Annotation>[] groups;
-        private List<ServiceDataVo> dataVos = new ArrayList<ServiceDataVo>();
+        private List<ServiceDataVo> dataVos = new ArrayList<>();
 
-        public DtoFieldCallback(Class[] groups) {
+        private DtoFieldCallback(Class<? extends Annotation>[] groups) {
             this.groups = groups;
         }
 
@@ -838,12 +809,18 @@ public abstract class AbstractScanGen implements TopGen {
             dataVos.add(dataVo);
         }
 
-        public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
+        public void doWith(Field field) throws IllegalArgumentException {
             if (groups != null && groups.length > 0) {
                 for (Class<? extends Annotation> group : groups) {
-                    if (field.isAnnotationPresent(group)) {
-                        addDataVo(getDataVoByDtoField(field));
-                        break;
+                    ApiField apiField = field.getAnnotation(ApiField.class);
+                    if (apiField == null) {
+                        return;
+                    }
+                    for (Class<? extends Annotation> showGroup : apiField.showGroup()) {
+                        if (showGroup.isAssignableFrom(group)) {
+                            addDataVo(getDataVoByDtoField(field));
+                            return;
+                        }
                     }
                 }
             } else {
@@ -851,7 +828,7 @@ public abstract class AbstractScanGen implements TopGen {
             }
         }
 
-        public List<ServiceDataVo> getDataVos() {
+        private List<ServiceDataVo> getDataVos() {
             return dataVos;
         }
     }
