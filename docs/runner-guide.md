@@ -9,20 +9,16 @@ pom.xml文件的追加依赖
         <dependency>
             <groupId>com.uyoqu</groupId>
             <artifactId>docs-runner</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3.1-SNAPSHOT</version>
         </dependency>
 ```
 # 2. 新建java的spring配置文件
 
+1. `java`配置方式
 ```java
 @Configuration
 @EnableHelloDocConfig//1
 public class HelloDocConfiguration {
-
-    @Bean
-    public DocConfigEntity configEntity(DocConfig docConfig) {//2
-        return DocConfigEntity.build(docConfig);
-    }
 
     @Bean
     public DocConfig docConfig() {//3
@@ -37,6 +33,9 @@ public class HelloDocConfiguration {
     }
 }
 ```
+2. `xml`配置方式
+//todo
+
 需要注意以上标注的三点。
 必须追加`@EnableHelloDocConfig`注解让spring启动时能够运行时生成HelloDoc。
 必须添加`DocConfig`和`DocConfigEntity`到spring容器中，其中DocConfig为对文档的配置，通过链式操作来定义文档。

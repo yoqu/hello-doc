@@ -11,6 +11,15 @@ import java.util.List;
  * @date 2018/4/17 - 20:46
  */
 public class ApiInfo {
+    /**
+     * 首页文档地址
+     */
+    private String basicDoc;
+
+    /**
+     * 文档前缀网址默认取当前的网址
+     */
+    private String docBaseUrl;
 
     private String name;
 
@@ -23,6 +32,31 @@ public class ApiInfo {
     private List<DtoDataVo> basicResp;
 
     private String buildTime;
+    /**
+     * 接口总数
+     */
+    private Integer incCount = 0;
+    /**
+     * 完成接口总数.
+     */
+    private Integer finishCount = 0;
+    private List<String> basicTip;
+
+    public String getBasicDoc() {
+        return basicDoc;
+    }
+
+    public void setBasicDoc(String basicDoc) {
+        this.basicDoc = basicDoc;
+    }
+
+    public String getDocBaseUrl() {
+        return docBaseUrl;
+    }
+
+    public void setDocBaseUrl(String docBaseUrl) {
+        this.docBaseUrl = docBaseUrl;
+    }
 
     public String getBuildTime() {
         return buildTime;
@@ -31,18 +65,6 @@ public class ApiInfo {
     public void setBuildTime(String buildTime) {
         this.buildTime = buildTime;
     }
-
-    /**
-     * 接口总数
-     */
-    private Integer incCount = 0;
-
-    /**
-     * 完成接口总数.
-     */
-    private Integer finishCount = 0;
-
-    private List<String> basicTip;
 
     public List<String> getBasicTip() {
         return basicTip;
@@ -120,6 +142,17 @@ public class ApiInfo {
             return this;
         }
 
+        public Builder docBaseUrl(String docBaseUrl) {
+            basicInfo.docBaseUrl = docBaseUrl;
+            return this;
+        }
+
+        public Builder basicDoc(String basicDoc) {
+            basicInfo.basicDoc = basicDoc;
+            return this;
+        }
+
+
         public Builder copyright(String copyright) {
             basicInfo.copyright = copyright;
             return this;
@@ -130,13 +163,14 @@ public class ApiInfo {
             basicInfo.enName = enName;
             return this;
         }
+
         public Builder buildTime(String buildTime) {
             basicInfo.buildTime = buildTime;
             return this;
         }
 
-        public Builder header(String name, String type, String desc, String remark, boolean required,String example) {
-            DtoDataVo dataVo = new DtoDataVo(name, type, desc, remark, String.valueOf(required),example);
+        public Builder header(String name, String type, String desc, String remark, boolean required, String example) {
+            DtoDataVo dataVo = new DtoDataVo(name, type, desc, remark, String.valueOf(required), example);
             if (basicInfo.header == null) {
                 basicInfo.header = new ArrayList<DtoDataVo>();
             }

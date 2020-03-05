@@ -70,7 +70,7 @@
             <Table :columns="retcodes_columns" :data="api_codes_data" :loading="table_loading"></Table>
         </Card>
         <Card v-show="documentBody!=''">
-            <p slot="title">说明</p>
+            <p slot="title">详细文档说明</p>
             <div class="md-content markdown-body">
             </div>
         </Card>
@@ -176,6 +176,14 @@
         created: function () {
             this.getData();
         },
+        computed: {
+            getMdBaseUrl(){
+                return this.$store.state.basicInfo['basic']['docBaseUrl']
+            },
+            getBasic() {
+                return this.$store.state.basicInfo;
+            }
+        },
         mounted: function () {
             let self = this;
             if (this.$store.state.firstLoadService) {
@@ -214,7 +222,7 @@
                 }
             },
             getDocuments(doc) {
-                getNotes(doc)
+                getNotes(doc,this.getMdBaseUrl)
                     .then(response => {
                         this.documentBody = response
                     })

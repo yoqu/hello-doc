@@ -50,13 +50,7 @@ div.home-layout-content-menu {
               </template>
               <template  v-for="subItem in item.subs">
                 <template v-if="subItem.hasOwnProperty('subs')">
-                  <template v-if="index == 0">
-                    <MenuItem v-for="item2 in subItem.subs" :key="item2.title" :name="item2.url" ref="menuItem">
-                      <span class="menu-item-name">{{item2.name}}</span>
-                      <span class="menu-item-dot" v-if="item2.isnew==1"></span>
-                    </MenuItem>
-                  </template>
-                  <template v-else>
+                  <template>
                     <Submenu  :key="subItem.name" :name="subItem.name" :title="subItem.name" :opened="subItem.opened">
                       <template slot="title">
                         {{subItem.name}}

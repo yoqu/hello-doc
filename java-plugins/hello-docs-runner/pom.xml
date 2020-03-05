@@ -5,12 +5,13 @@
   <parent>
     <artifactId>doc</artifactId>
     <groupId>com.uyoqu</groupId>
-    <version>1.0.3.1-SNAPSHOT</version>
+    <version>1.0.5-RELEASE</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>docs-runner</artifactId>
   <packaging>jar</packaging>
+  <version>${parent.version}</version>
   <dependencies>
     <dependency>
       <groupId>com.uyoqu</groupId>

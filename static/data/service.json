@@ -2,7 +2,7 @@
 	"com.iflytek.cbg.emoji.api.config.service.BannerListApiService_1.0":{
 		"cnName":"首页banner位置",
 		"desc":"",
-		"doc":"basicc",
+		"doc":"basic.md",
 		"finish":100,
 		"group":"广告位",
 		"method":"POST",

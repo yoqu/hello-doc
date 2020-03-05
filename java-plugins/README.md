@@ -6,3 +6,5 @@
 
 # 更新maven版本号方法
 
+`mvn versions:set -DnewVersion=1.0.5-RELEASE`
+

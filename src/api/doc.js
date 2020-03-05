@@ -10,18 +10,9 @@ function getBaseUrl() {
     }
 }
 
-function getMdBaseUrl(){
-    if(localStorage.getItem("config")!=null){
-        let mdUrl = JSON.parse(localStorage.getItem("config"))['mdUrl'];
-        return fixBaseUrl(mdUrl)
-    }else{
-        return ''
-    }
-}
-
 export function fixBaseUrl(baseUrl) {
-    if(baseUrl===undefined || baseUrl===''){
-        return''
+    if (baseUrl === undefined || baseUrl === '') {
+        return ''
     }
     if (baseUrl.lastIndexOf('/') !== baseUrl.length - 1) {
         baseUrl = baseUrl + '/'
@@ -64,9 +55,14 @@ export function getTimeline() {
     })
 }
 
-export function getNotes(doc) {
+export function getNotes(doc, mdUrl) {
+    if (mdUrl == undefined) {
+        mdUrl = ''
+    } else if (!mdUrl.endsWith('/')) {
+        mdUrl = mdUrl + "/";
+    }
     return request({
-        url: getMdBaseUrl() + 'docs/' + doc + '.md'
+        url: mdUrl + doc
     })
 }
 

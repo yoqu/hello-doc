@@ -1,8 +1,30 @@
 package com.uyoqu.hello.docs.core.gen;
 
-import com.uyoqu.hello.docs.core.annotation.*;
+import com.uyoqu.hello.docs.core.annotation.ApiBasicFiled;
+import com.uyoqu.hello.docs.core.annotation.ApiCode;
+import com.uyoqu.hello.docs.core.annotation.ApiCodes;
+import com.uyoqu.hello.docs.core.annotation.ApiDTO;
+import com.uyoqu.hello.docs.core.annotation.ApiGlobalCode;
+import com.uyoqu.hello.docs.core.annotation.ApiHeader;
+import com.uyoqu.hello.docs.core.annotation.ApiHeaders;
+import com.uyoqu.hello.docs.core.annotation.ApiIn;
+import com.uyoqu.hello.docs.core.annotation.ApiInDTO;
+import com.uyoqu.hello.docs.core.annotation.ApiOut;
+import com.uyoqu.hello.docs.core.annotation.ApiOutDTO;
+import com.uyoqu.hello.docs.core.annotation.ApiServiceDocs;
+import com.uyoqu.hello.docs.core.annotation.ApiTimeline;
+import com.uyoqu.hello.docs.core.annotation.In;
+import com.uyoqu.hello.docs.core.annotation.Out;
+import com.uyoqu.hello.docs.core.annotation.Timeline;
 import com.uyoqu.hello.docs.core.exception.ParameterErrorException;
-import com.uyoqu.hello.docs.core.vo.*;
+import com.uyoqu.hello.docs.core.vo.CodeVo;
+import com.uyoqu.hello.docs.core.vo.DtoDataVo;
+import com.uyoqu.hello.docs.core.vo.DtoVo;
+import com.uyoqu.hello.docs.core.vo.MenuGroupVo;
+import com.uyoqu.hello.docs.core.vo.MenuVo;
+import com.uyoqu.hello.docs.core.vo.ServiceDataVo;
+import com.uyoqu.hello.docs.core.vo.ServiceVo;
+import com.uyoqu.hello.docs.core.vo.TimelineVo;
 import lombok.var;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +35,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -22,7 +51,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: yoqu
@@ -402,9 +440,10 @@ public abstract class AbstractScanGen implements TopGen {
      * 处理方法上的注解
      *
      * @param element
+     * @param isRest
      * @return
      */
-    private List<ServiceDataVo> resolveMethodAnnoIn(AnnotatedElement element) {
+    private List<ServiceDataVo> resolveMethodAnnoIn(AnnotatedElement element, boolean isRest) {
         // 入参
         final List<ServiceDataVo> requestList = new ArrayList<ServiceDataVo>();
         var isAdded = false;
@@ -425,7 +464,7 @@ public abstract class AbstractScanGen implements TopGen {
         //如果没有使用APiIn注解使用了APIInDto的注解
         if (!isAdded && element.isAnnotationPresent(ApiInDTO.class)) {
             ApiInDTO def = element.getAnnotation(ApiInDTO.class);
-            readServiceDto(requestList, def.clazz());
+            readServiceDto(requestList, def.clazz(), def.groups());
             isAdded = true;
         }
         //处理method类型的数据
@@ -434,9 +473,13 @@ public abstract class AbstractScanGen implements TopGen {
             Class[] methodCLass = ((Method) element).getParameterTypes();
             for (int i = 0; i < methodCLass.length; i++) {
                 var isFound = false;
+                if(isRest && methodCLass[i].isAnnotationPresent(ApiDTO.class)){
+                    readServiceDto(requestList, methodCLass[i], null);
+                    break;
+                }
                 for (Annotation a : anns[i]) {
                     if (a.annotationType() == ApiInDTO.class) {
-                        readServiceDto(requestList, methodCLass[i]);
+                        readServiceDto(requestList, methodCLass[i], ((ApiInDTO) a).groups());
                         isFound = true;
                         break;
                     }
@@ -455,11 +498,11 @@ public abstract class AbstractScanGen implements TopGen {
      * @param dataVos
      * @param clazz2
      */
-    private void readServiceDto(List<ServiceDataVo> dataVos, Class clazz2) {
+    private void readServiceDto(List<ServiceDataVo> dataVos, Class clazz2, Class<? extends Annotation>[] groups) {
         if (clazz2 == null) {
             throw new ParameterErrorException("parameter type error.");
         }
-        DtoFieldCallback dtoCallBack = new DtoFieldCallback();
+        DtoFieldCallback dtoCallBack = new DtoFieldCallback(groups);
         ReflectionUtils.doWithFields(clazz2, dtoCallBack);
         dataVos.addAll(dtoCallBack.getDataVos());
     }
@@ -487,7 +530,7 @@ public abstract class AbstractScanGen implements TopGen {
             if (clazz == Object.class && element instanceof Method) {//处理空场景
                 clazz = ((Method) element).getReturnType();
             }
-            readServiceDto(responseList, clazz);
+            readServiceDto(responseList, clazz, def.groups());
             isAdded = true;
         }
         return responseList;
@@ -542,7 +585,7 @@ public abstract class AbstractScanGen implements TopGen {
                     basicInfo.setFinishCount(basicInfo.getFinishCount() + 1);
                 }
                 // 入参
-                vo.setRequests(resolveMethodAnnoIn(clazz));
+                vo.setRequests(resolveMethodAnnoIn(clazz, false));
                 // 出参
                 vo.setResponses(resolveServiceOut(clazz));
                 //返回码
@@ -570,6 +613,13 @@ public abstract class AbstractScanGen implements TopGen {
                     ServiceVo vo = new ServiceVo(apiServiceDocs);
                     vo.setServiceFullName(clazz.getName() + "." + method.getName());
                     String url = "";
+                    boolean isRest = false;//如果是rest请求进行
+                    if (clazz.isAnnotationPresent(RestController.class)) {
+                        isRest = true;
+                    }
+                    if (method.getAnnotatedReturnType().isAnnotationPresent(ResponseBody.class)) {
+                        isRest = true;
+                    }
                     if (method.isAnnotationPresent(RequestMapping.class)) {
                         RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
                         url = requestMapping.value()[0];
@@ -607,7 +657,7 @@ public abstract class AbstractScanGen implements TopGen {
                         basicInfo.setFinishCount(basicInfo.getFinishCount() + 1);
                     }
                     //入参
-                    List<ServiceDataVo> ins = resolveMethodAnnoIn(method);
+                    List<ServiceDataVo> ins = resolveMethodAnnoIn(method, isRest);
                     if (!CollectionUtils.isEmpty(ins)) {
                         vo.setRequests(ins);
                     } else {
@@ -615,8 +665,8 @@ public abstract class AbstractScanGen implements TopGen {
                         vo.setRequests(in);
                     }
                     // 出参
-                    if (method.getReturnType().isAnnotationPresent(ApiDTO.class)) {
-                        DtoFieldCallback dtoCallBack = new DtoFieldCallback();
+                    if (isRest && method.getReturnType().isAnnotationPresent(ApiDTO.class)) {
+                        DtoFieldCallback dtoCallBack = new DtoFieldCallback(null);
                         ReflectionUtils.doWithFields(method.getReturnType(), dtoCallBack);
                         vo.setResponses(dtoCallBack.getDataVos());
                     } else {
@@ -673,7 +723,7 @@ public abstract class AbstractScanGen implements TopGen {
                 }
             }
             if (!isFoundAnnotation && request.isAnnotationPresent(ApiDTO.class)) {
-                DtoFieldCallback dtoCallBack = new DtoFieldCallback();
+                DtoFieldCallback dtoCallBack = new DtoFieldCallback(null);
                 log.warn("request:{}", request);
                 ReflectionUtils.doWithFields(request, dtoCallBack);
                 in.addAll(dtoCallBack.getDataVos());
@@ -774,15 +824,31 @@ public abstract class AbstractScanGen implements TopGen {
      * 处理实体字段
      */
     private class DtoFieldCallback implements ReflectionUtils.FieldCallback {
-
+        Class<? extends Annotation>[] groups;
         private List<ServiceDataVo> dataVos = new ArrayList<ServiceDataVo>();
 
-        public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-            ServiceDataVo dataVo = getDataVoByDtoField(field);
+        public DtoFieldCallback(Class[] groups) {
+            this.groups = groups;
+        }
+
+        private void addDataVo(ServiceDataVo dataVo) {
             if (dataVo == null) {
                 return;
             }
             dataVos.add(dataVo);
+        }
+
+        public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
+            if (groups != null && groups.length > 0) {
+                for (Class<? extends Annotation> group : groups) {
+                    if (field.isAnnotationPresent(group)) {
+                        addDataVo(getDataVoByDtoField(field));
+                        break;
+                    }
+                }
+            } else {
+                addDataVo(getDataVoByDtoField(field));
+            }
         }
 
         public List<ServiceDataVo> getDataVos() {

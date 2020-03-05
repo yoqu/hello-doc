@@ -158,9 +158,6 @@
                 <FormItem label="文档源" label-position="top">
                     <Input v-model="configData.baseUrl" placeholder="请输入接口文档源地址"/>
                 </FormItem>
-                <FormItem label="md文档地址" label-position="top">
-                    <Input v-model="configData.mdUrl" placeholder="请输入md文档基础地址"/>
-                </FormItem>
             </Form>
             <div class="demo-drawer-footer">
                 <Button type="primary" @click="handleSaveConfig">保存</Button>
@@ -182,7 +179,6 @@
                 configDrawer: false,
                 configData: {
                     baseUrl: "",
-                    mdUrl:''
                 },
                 info: {
                     name: "",

@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/hello-docs")
 public class StaticController {
 
-    @RequestMapping(value = {"","/"})
-    public String index(){
+    @RequestMapping(value = "")
+    public String index() {
         return "redirect:hello-docs/index.html";
+    }
+
+    @RequestMapping("/")
+    public String index2() {
+        return "redirect:index.html";
     }
 }

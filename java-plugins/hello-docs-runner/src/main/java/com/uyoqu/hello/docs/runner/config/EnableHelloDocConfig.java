@@ -1,9 +1,12 @@
 package com.uyoqu.hello.docs.runner.config;
 
-import com.uyoqu.hello.docs.runner.entity.DocConfigEntity;
 import org.springframework.context.annotation.Import;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author: yoqu
@@ -13,6 +16,6 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(DocConfigEntity.class)
+@Import(DocConfiguration.class)
 public @interface EnableHelloDocConfig {
 }

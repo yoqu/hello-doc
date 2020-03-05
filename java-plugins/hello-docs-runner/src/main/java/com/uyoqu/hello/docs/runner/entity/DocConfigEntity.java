@@ -8,21 +8,13 @@ import com.uyoqu.hello.docs.core.vo.MenuGroupVo;
 import com.uyoqu.hello.docs.core.vo.ServiceVo;
 import com.uyoqu.hello.docs.core.vo.TimelineVo;
 import com.uyoqu.hello.docs.runner.config.DocConfig;
-import com.uyoqu.hello.docs.runner.controller.ApiController;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.CacheControl;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author: yoqu
@@ -31,8 +23,6 @@ import java.util.concurrent.TimeUnit;
  **/
 @Slf4j
 @Data
-@Configuration
-@ComponentScan(basePackages = {"com.uyoqu.hello.docs.runner.controller"})
 public class DocConfigEntity {
     //菜单
     protected List<MenuGroupVo> menuList = new ArrayList<MenuGroupVo>();
@@ -64,24 +54,6 @@ public class DocConfigEntity {
         } catch (Exception e) {
             log.error("hello doc generate fail.");
             throw new RuntimeException(e);
-        }
-    }
-
-    @Bean
-    public DocConfigEntity configEntity(DocConfig docConfig) {
-        return DocConfigEntity.build(docConfig);
-    }
-
-    @Configuration
-    static class WebConfig extends WebMvcConfigurerAdapter {
-
-        @Override
-        public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            super.addResourceHandlers(registry);
-            registry
-                    .addResourceHandler("/hello-docs/**")
-                    .addResourceLocations("classpath:/META-INF/resources/hello-docs/")
-                    .setCacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic());
         }
     }
 }

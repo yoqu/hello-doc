@@ -22,6 +22,7 @@
 		}
 	],
 	"basic":{
+		"basicDoc": "basic.md",
 		"basicResp":[
 			{
 				"desc":"返回编码",

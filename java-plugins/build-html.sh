@@ -15,4 +15,5 @@ echo "clear old html cache success"
 rm -rf dist/static/data/*
 cp -R dist/* java-plugins/maven-plugin/src/main/resources/static/
 cp -R dist/* java-plugins/hello-docs-runner/src/main/resources/hello-docs
+rm -rf java-plugins/hello-docs-runner/src/main/resources/hello-docs/docs
 echo "generate html success."
