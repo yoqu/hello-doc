@@ -2,6 +2,10 @@
     .service-header {
         font-size: 16px;
         font-weight: bold;
+        padding-left: 20px;
+        margin: 2px 0;
+        display: inline-block;
+        line-height: 25px;
     }
 
     .service-header-wide {
@@ -40,7 +44,9 @@
 
 <template>
     <div>
-        <h2 class="service-header">{{cnName}}</h2>
+        <h2 class="service-header">{{cnName}}
+            <Tag color="red" v-if="needAuth">需权限认证</Tag>
+        </h2>
         <p class="service-sub-header service-header-wide">{{desc}}</p>
         <p class="service-sub-header">服务名称：{{serviceName}}
             <Divider type="vertical"/>
@@ -170,6 +176,7 @@
                 version: "",
                 method: "",
                 documentBody: "",
+                needAuth: false,
                 finish: 0
             };
         },
@@ -177,7 +184,7 @@
             this.getData();
         },
         computed: {
-            getMdBaseUrl(){
+            getMdBaseUrl() {
                 return this.$store.state.basicInfo['basic']['docBaseUrl']
             },
             getBasic() {
@@ -222,7 +229,7 @@
                 }
             },
             getDocuments(doc) {
-                getNotes(doc,this.getMdBaseUrl)
+                getNotes(doc, this.getMdBaseUrl)
                     .then(response => {
                         this.documentBody = response
                     })
@@ -244,6 +251,7 @@
                 this.api_codes_data = dataToArray(service.apiCodes);
                 this.timelines = dataToArray(service.timelines);
                 this.finish = service.finish;
+                this.needAuth = service.needAuth;
                 if (
                     service.doc != null &&
                     service.doc != undefined &&

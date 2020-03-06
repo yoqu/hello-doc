@@ -9,43 +9,45 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 public @interface ApiService {
 
-  /**
-   * @return 中文名
-   */
-  String cnName();
+    /**
+     * @return 中文名
+     */
+    String cnName();
 
-  /**
-   * @return 服务名
-   */
-  String serviceName() default "";
+    /**
+     * @return 服务名
+     */
+    String serviceName() default "";
 
-  /**
-   * @return 版本号
-   */
-  String version() default "1.0";
+    /**
+     * @return 版本号
+     */
+    String version() default "1.0";
 
-  /**
-   * @return 请求方法[GET/POST/PUT/DELETE]
-   */
-  String[] methods() default "POST";
+    /**
+     * @return 请求方法[GET/POST/PUT/DELETE]
+     */
+    String[] methods() default "POST";
 
-  /**
-   * @return 简介
-   */
-  String desc() default "";
+    /**
+     * @return 简介
+     */
+    String desc() default "";
 
-  /**
-   * @return 菜单一级分组
-   */
-  String group() default "";
+    /**
+     * @return 菜单一级分组
+     */
+    String group() default "";
 
-  /**
-   * @return md文档相对路径
-   */
-  String doc() default "";
+    /**
+     * @return md文档相对路径
+     */
+    String doc() default "";
 
-  /**
-   * @return 完成开发进度百分比, 默认为0, 最高100
-   */
-  int finish() default 0;
+    /**
+     * @return 完成开发进度百分比, 默认为0, 最高100
+     */
+    int finish() default 0;
+
+    boolean needAuth() default false;
 }

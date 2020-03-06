@@ -82,6 +82,7 @@
 				"url":"/service/com.iflytek.cbg.emoji.api.config.service.BannerListApiService_1.0"
 			}
 		],
+		"needAuth": false,
 		"version":"1.0"
 	}
 }

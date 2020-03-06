@@ -22,6 +22,15 @@ public class ServiceVo {
   private List<TimelineVo> timelines;
   private String doc;
   private int finish;
+  private Boolean needAuth;
+
+  public Boolean getNeedAuth() {
+    return needAuth;
+  }
+
+  public void setNeedAuth(Boolean needAuth) {
+    this.needAuth = needAuth;
+  }
 
   public String getServiceFullName() {
     return serviceFullName;

@@ -570,6 +570,7 @@ public abstract class AbstractScanGen implements TopGen {
                 //返回码
                 vo.setApiCodes(resolveCodes(clazz));
                 vo.setHeaders(resolveServiceHeaders(clazz));
+                vo.setNeedAuth(ann.needAuth());
                 // 时间轴
                 List<TimelineVo> timelines = new ArrayList<>();
                 resolveTimeline(clazz, timelines);
@@ -590,6 +591,7 @@ public abstract class AbstractScanGen implements TopGen {
                 }
                 ServiceVo vo = new ServiceVo(apiService);
                 vo.setServiceFullName(clazz.getName() + "." + method.getName());
+                vo.setNeedAuth(apiService.needAuth());
                 String url = "";
                 boolean isRest = false;//如果是rest请求进行
                 if (clazz.isAnnotationPresent(RestController.class)) {
