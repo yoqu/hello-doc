@@ -2,7 +2,7 @@ var $ = require('jquery');
 require('@/styles/md.css')
 import hljs from 'highlight.js';
 import marked from 'marked';
-import flowchart from 'flowchart.js/release/flowchart'; // ugly
+import flowchart from 'flowchart.js'; // ugly
 let flowchartOptions = {
     x: 0,
     y: 0,
@@ -76,7 +76,7 @@ function renderFlowcharts(scope) {
 export default {
     render: function (container, markdownString = '') {
         container.innerHTML = marked(markdownString);
-        $(container).find('pre code').each(function (index,block) {                
+        $(container).find('pre code').each(function (index,block) {
             hljs.highlightBlock(block);
         })
         renderFlowcharts(container);

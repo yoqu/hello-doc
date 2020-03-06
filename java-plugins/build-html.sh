@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source /etc/profile
+cd `dirname $0`
 PARAM=$1
 cd ../
 if [ "$PARAM" ]; then

@@ -1,5 +1,5 @@
 import marked from 'marked';
-import flowchart from 'flowchart.js/release/flowchart';
+import flowchart from 'flowchart.js';
 export default function (newOptions) {
     let Renderer = marked.Renderer;
     let RendererPrototype = Renderer.prototype;
