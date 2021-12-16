@@ -25,13 +25,13 @@ public class ScanWrapper {
 
     private static final String RESOURCE_PATTERN = "/**/*.class";
 
-    private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+    private final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 
-    private List<String> packagesList = new LinkedList<String>();
+    private final List<String> packagesList = new LinkedList<>();
 
-    private List<TypeFilter> typeFilters = new LinkedList<TypeFilter>();
+    private final List<TypeFilter> typeFilters = new LinkedList<>();
 
-    private Set<Class<?>> classSet = new HashSet<Class<?>>();
+    private final Set<Class<?>> classSet = new HashSet<>();
 
     /**
      * 构造函数
@@ -39,6 +39,7 @@ public class ScanWrapper {
      * @param packagesToScan   指定哪些包需要被扫描,支持多个包"package.a,package.b"并对每个包都会递归搜索
      * @param annotationFilter 指定扫描包中含有特定注解标记的bean,支持多个注解
      */
+    @SafeVarargs
     public ScanWrapper(String[] packagesToScan, Class<? extends Annotation>... annotationFilter) {
         if (packagesToScan != null) {
             Collections.addAll(this.packagesList, packagesToScan);
@@ -53,8 +54,6 @@ public class ScanWrapper {
     /**
      * 将符合条件的Bean以Class集合的形式返回
      *
-     * @throws IOException
-     * @throws ClassNotFoundException
      */
     public Set<Class<?>> getClassSet() throws IOException, ClassNotFoundException {
         this.classSet.clear();
@@ -88,7 +87,6 @@ public class ScanWrapper {
     /**
      * 检查当前扫描到的Bean含有任何一个指定的注解标记
      *
-     * @throws IOException
      */
     private boolean matchesEntityTypeFilter(MetadataReader reader, MetadataReaderFactory readerFactory) throws IOException {
         if (!this.typeFilters.isEmpty()) {

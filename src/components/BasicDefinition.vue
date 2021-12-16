@@ -64,7 +64,7 @@ export default {
                 },
                 {
                     title: "说明",
-                    key: "des"
+                    key: "desc"
                 }
             ],
             documentBody: "",

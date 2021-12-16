@@ -1,9 +1,6 @@
 package com.uyoqu.hello.docs.core.vo;
 
-/**
- * Created by zhpeng2 on 2017/9/29.
- */
-public class BasicDefinitionVo {
+public class BasicDefinitionVO {
     private String name;
     private String type;
     private String desc;

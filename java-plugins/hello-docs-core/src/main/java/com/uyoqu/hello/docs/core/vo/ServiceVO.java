@@ -4,10 +4,7 @@ import com.uyoqu.hello.docs.core.annotation.ApiService;
 
 import java.util.List;
 
-/**
- * Created by zhpeng2 on 2017/9/29.
- */
-public class ServiceVo {
+public class ServiceVO {
   private String cnName;
   private String serviceName;
   private String serviceFullName;
@@ -15,11 +12,11 @@ public class ServiceVo {
   private String version;
   private String method;
   private String group;
-  private List<ServiceDataVo> requests;
-  private List<ServiceDataVo> headers;
-  private List<ServiceDataVo> responses;
-  private List<CodeVo> apiCodes;
-  private List<TimelineVo> timelines;
+  private List<ServiceDataVO> requests;
+  private List<ServiceDataVO> headers;
+  private List<ServiceDataVO> responses;
+  private List<CodeVO> apiCodes;
+  private List<TimelineVO> timelines;
   private String doc;
   private int finish;
   private Boolean needAuth;
@@ -40,18 +37,18 @@ public class ServiceVo {
     this.serviceFullName = serviceFullName;
   }
 
-  public List<CodeVo> getApiCodes() {
+  public List<CodeVO> getApiCodes() {
     return apiCodes;
   }
 
-  public void setApiCodes(List<CodeVo> apiCodes) {
+  public void setApiCodes(List<CodeVO> apiCodes) {
     this.apiCodes = apiCodes;
   }
 
-  public ServiceVo() {
+  public ServiceVO() {
   }
 
-  public ServiceVo(ApiService apiService) {
+  public ServiceVO(ApiService apiService) {
     this.cnName = apiService.cnName();
     this.desc = apiService.desc();
     this.version = apiService.version();
@@ -124,35 +121,35 @@ public class ServiceVo {
     this.method = method;
   }
 
-  public List<ServiceDataVo> getRequests() {
+  public List<ServiceDataVO> getRequests() {
     return requests;
   }
 
-  public void setRequests(List<ServiceDataVo> requests) {
+  public void setRequests(List<ServiceDataVO> requests) {
     this.requests = requests;
   }
 
-  public List<ServiceDataVo> getHeaders() {
+  public List<ServiceDataVO> getHeaders() {
     return headers;
   }
 
-  public void setHeaders(List<ServiceDataVo> headers) {
+  public void setHeaders(List<ServiceDataVO> headers) {
     this.headers = headers;
   }
 
-  public List<ServiceDataVo> getResponses() {
+  public List<ServiceDataVO> getResponses() {
     return responses;
   }
 
-  public void setResponses(List<ServiceDataVo> responses) {
+  public void setResponses(List<ServiceDataVO> responses) {
     this.responses = responses;
   }
 
-  public List<TimelineVo> getTimelines() {
+  public List<TimelineVO> getTimelines() {
     return timelines;
   }
 
-  public void setTimelines(List<TimelineVo> timelines) {
+  public void setTimelines(List<TimelineVO> timelines) {
     this.timelines = timelines;
   }
 }

@@ -1,9 +1,9 @@
 package com.uyoqu.hello.docs.runner.controller;
 
-import com.uyoqu.hello.docs.core.vo.DtoVo;
-import com.uyoqu.hello.docs.core.vo.MenuGroupVo;
-import com.uyoqu.hello.docs.core.vo.ServiceVo;
-import com.uyoqu.hello.docs.core.vo.TimelineVo;
+import com.uyoqu.hello.docs.core.vo.DtoVO;
+import com.uyoqu.hello.docs.core.vo.MenuGroupVO;
+import com.uyoqu.hello.docs.core.vo.ServiceVO;
+import com.uyoqu.hello.docs.core.vo.TimelineVO;
 import com.uyoqu.hello.docs.runner.entity.DocConfigEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +34,7 @@ public class ApiController {
   }
 
   @GetMapping("/dto.json")
-  public Map<String, DtoVo> dto() {
+  public Map<String, DtoVO> dto() {
     if (configEntity != null) {
       return configEntity.getDtoMap();
     }
@@ -42,7 +42,7 @@ public class ApiController {
   }
 
   @GetMapping("/nav_menu.json")
-  public List<MenuGroupVo> navMenu() {
+  public List<MenuGroupVO> navMenu() {
     if (configEntity != null) {
       return configEntity.getMenuList();
     }
@@ -50,7 +50,7 @@ public class ApiController {
   }
 
   @GetMapping("/service.json")
-  public Map<String, ServiceVo> service() {
+  public Map<String, ServiceVO> service() {
     if (configEntity != null) {
       return configEntity.getServiceMap();
     }
@@ -58,7 +58,7 @@ public class ApiController {
   }
 
   @GetMapping("/timelines.json")
-  public List<TimelineVo> timelines() {
+  public List<TimelineVO> timelines() {
     if (configEntity != null) {
       return configEntity.getTimelineList();
     }

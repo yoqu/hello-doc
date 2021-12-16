@@ -40,7 +40,7 @@ public class GenHelper {
    * appname
    */
 
-  private String appName = "Hello Doc";
+  private String appName;
 
   /**
    * copyright
@@ -115,8 +115,8 @@ public class GenHelper {
 
   private void generate() throws Exception {
     String destDirectory = outputDirectory.getPath() + "/api-doc";
-    TopGen gen = new FileGen(destDirectory);
-    gen.scanPakcages(scanPackage);
+    Gen gen = new FileGen(destDirectory);
+    gen.scanPackages(scanPackage);
     gen.init(getAppInfo());
 //    gen.setConfigs(configs);
     gen.handler();

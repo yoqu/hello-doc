@@ -2,15 +2,12 @@ package com.uyoqu.hello.docs.core.vo;
 
 import java.util.List;
 
-/**
- * Created by zhpeng2 on 2017/9/29.
- */
-public class DtoVo {
+public class DtoVO {
     private String cnName;
     private String enName;
     private String desc;
-    private List<DtoDataVo> data;
-    private List<TimelineVo> timelines;
+    private List<DtoDataVO> data;
+    private List<TimelineVO> timelines;
     private String doc;
 
     public String getDoc() {
@@ -45,19 +42,19 @@ public class DtoVo {
         this.desc = desc;
     }
 
-    public List<DtoDataVo> getData() {
+    public List<DtoDataVO> getData() {
         return data;
     }
 
-    public void setData(List<DtoDataVo> data) {
+    public void setData(List<DtoDataVO> data) {
         this.data = data;
     }
 
-    public List<TimelineVo> getTimelines() {
+    public List<TimelineVO> getTimelines() {
         return timelines;
     }
 
-    public void setTimelines(List<TimelineVo> timelines) {
+    public void setTimelines(List<TimelineVO> timelines) {
         this.timelines = timelines;
     }
 }

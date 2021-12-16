@@ -2,18 +2,15 @@ package com.uyoqu.hello.docs.core.vo;
 
 import com.uyoqu.hello.docs.core.annotation.Timeline;
 
-/**
- * Created by zhpeng2 on 2017/9/29.
- */
-public class TimelineVo {
+public class TimelineVO {
   private String time;
   private String content;
   private String url;
 
-  public TimelineVo() {
+  public TimelineVO() {
   }
 
-  public TimelineVo(Timeline timeline) {
+  public TimelineVO(Timeline timeline) {
     setTime(timeline.time());
     setContent(timeline.content());
   }

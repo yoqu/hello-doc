@@ -1,7 +1,7 @@
 package com.uyoqu.hello.docs.core.gen;
 
 
-import com.uyoqu.hello.docs.core.vo.DtoDataVo;
+import com.uyoqu.hello.docs.core.vo.DtoDataVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,12 @@ public class ApiInfo {
     /**
      * 首页文档地址
      */
-    private String basicDoc;
+    private String doc;
 
     /**
      * 文档前缀网址默认取当前的网址
      */
-    private String docBaseUrl;
+    private String baseUrl;
 
     private String name;
 
@@ -27,9 +27,9 @@ public class ApiInfo {
 
     private String copyright;
 
-    private List<DtoDataVo> header;
+    private List<DtoDataVO> header;
 
-    private List<DtoDataVo> basicResp;
+    private List<DtoDataVO> resp;
 
     private String buildTime;
     /**
@@ -40,23 +40,7 @@ public class ApiInfo {
      * 完成接口总数.
      */
     private Integer finishCount = 0;
-    private List<String> basicTip;
-
-    public String getBasicDoc() {
-        return basicDoc;
-    }
-
-    public void setBasicDoc(String basicDoc) {
-        this.basicDoc = basicDoc;
-    }
-
-    public String getDocBaseUrl() {
-        return docBaseUrl;
-    }
-
-    public void setDocBaseUrl(String docBaseUrl) {
-        this.docBaseUrl = docBaseUrl;
-    }
+    private List<String> tips;
 
     public String getBuildTime() {
         return buildTime;
@@ -66,13 +50,6 @@ public class ApiInfo {
         this.buildTime = buildTime;
     }
 
-    public List<String> getBasicTip() {
-        return basicTip;
-    }
-
-    public void setBasicTip(List<String> basicTip) {
-        this.basicTip = basicTip;
-    }
 
     public Integer getFinishCount() {
         return finishCount;
@@ -114,21 +91,14 @@ public class ApiInfo {
         this.copyright = copyright;
     }
 
-    public List<DtoDataVo> getHeader() {
+    public List<DtoDataVO> getHeader() {
         return header;
     }
 
-    public void setHeader(List<DtoDataVo> header) {
+    public void setHeader(List<DtoDataVO> header) {
         this.header = header;
     }
 
-    public List<DtoDataVo> getBasicResp() {
-        return basicResp;
-    }
-
-    public void setBasicResp(List<DtoDataVo> basicResp) {
-        this.basicResp = basicResp;
-    }
 
     public static class Builder {
         private ApiInfo basicInfo;
@@ -142,13 +112,13 @@ public class ApiInfo {
             return this;
         }
 
-        public Builder docBaseUrl(String docBaseUrl) {
-            basicInfo.docBaseUrl = docBaseUrl;
+        public Builder baseUrl(String baseUrl) {
+            basicInfo.baseUrl = baseUrl;
             return this;
         }
 
-        public Builder basicDoc(String basicDoc) {
-            basicInfo.basicDoc = basicDoc;
+        public Builder doc(String doc) {
+            basicInfo.doc = doc;
             return this;
         }
 
@@ -170,31 +140,30 @@ public class ApiInfo {
         }
 
         public Builder header(String name, String type, String desc, String remark, boolean required, String example) {
-            DtoDataVo dataVo = new DtoDataVo(name, type, desc, remark, String.valueOf(required), example);
+            DtoDataVO dataVo = new DtoDataVO(name, type, desc, remark, String.valueOf(required), example);
             if (basicInfo.header == null) {
-                basicInfo.header = new ArrayList<DtoDataVo>();
+                basicInfo.header = new ArrayList<DtoDataVO>();
             }
             basicInfo.header.add(dataVo);
             return this;
         }
 
         public Builder tip(String tip) {
-            if (basicInfo.basicTip == null) {
-                basicInfo.basicTip = new ArrayList<String>();
+            if (basicInfo.tips == null) {
+                basicInfo.tips = new ArrayList<String>();
             }
-            basicInfo.basicTip.add(tip);
+            basicInfo.tips.add(tip);
             return this;
         }
 
         public Builder response(String name, String type, String desc, String remark, boolean required) {
-            DtoDataVo dataVo = new DtoDataVo(name, type, desc, remark, String.valueOf(required));
-            if (basicInfo.basicResp == null) {
-                basicInfo.basicResp = new ArrayList<DtoDataVo>();
+            DtoDataVO dataVo = new DtoDataVO(name, type, desc, remark, String.valueOf(required));
+            if (basicInfo.resp == null) {
+                basicInfo.resp = new ArrayList<DtoDataVO>();
             }
-            basicInfo.basicResp.add(dataVo);
+            basicInfo.resp.add(dataVo);
             return this;
         }
-
 
         public ApiInfo build() {
             return basicInfo;

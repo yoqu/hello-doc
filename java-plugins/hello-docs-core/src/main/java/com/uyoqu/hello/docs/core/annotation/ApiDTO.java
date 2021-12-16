@@ -2,13 +2,15 @@ package com.uyoqu.hello.docs.core.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * DTO对象定义
  */
-@java.lang.annotation.Target({ElementType.TYPE})
-@java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ApiDTO {
 

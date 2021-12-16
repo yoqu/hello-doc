@@ -1,9 +1,5 @@
 package com.uyoqu.hello.docs.core.gen;
 
-/**
- * GEN异常。
- * Created by zhpeng2 on 2017/9/29.
- */
 public class GenException extends Exception {
     private Class<?> clazz;
 

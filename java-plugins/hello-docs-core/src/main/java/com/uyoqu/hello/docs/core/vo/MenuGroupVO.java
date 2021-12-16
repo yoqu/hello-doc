@@ -1,13 +1,9 @@
 package com.uyoqu.hello.docs.core.vo;
 
 import java.util.List;
-
-/**
- * Created by zhpeng2 on 2017/9/29.
- */
-public class MenuGroupVo {
+public class MenuGroupVO {
     private String title;
-    private List<MenuVo> subs;
+    private List<MenuVO> subs;
     private transient int sort;
 
     public String getTitle() {
@@ -18,11 +14,11 @@ public class MenuGroupVo {
         this.title = title;
     }
 
-    public List<MenuVo> getSubs() {
+    public List<MenuVO> getSubs() {
         return subs;
     }
 
-    public void setSubs(List<MenuVo> subs) {
+    public void setSubs(List<MenuVO> subs) {
         this.subs = subs;
     }
 
