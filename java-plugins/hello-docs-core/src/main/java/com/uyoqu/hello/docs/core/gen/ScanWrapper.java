@@ -15,11 +15,6 @@ import org.springframework.util.ClassUtils;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
-
-/**
- * 扫描包。
- * Created by zhpeng2 on 2017/9/29.
- */
 public class ScanWrapper {
     private static final Logger log = LoggerFactory.getLogger(ScanWrapper.class);
 

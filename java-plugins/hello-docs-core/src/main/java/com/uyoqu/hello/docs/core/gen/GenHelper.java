@@ -115,11 +115,11 @@ public class GenHelper {
 
   private void generate() throws Exception {
     String destDirectory = outputDirectory.getPath() + "/api-doc";
-    Gen gen = new FileGen(destDirectory);
-    gen.scanPackages(scanPackage);
-    gen.init(getAppInfo());
+    Generate generate = new FileGenerate(destDirectory);
+    generate.scanPackages(scanPackage);
+    generate.init(getAppInfo());
 //    gen.setConfigs(configs);
-    gen.handler();
+    generate.handler();
     //如果包含文档目录,也要复制到指定目录下
     if (!StringUtils.isEmpty(docDirectory)) {
       copyDoc(destDirectory);

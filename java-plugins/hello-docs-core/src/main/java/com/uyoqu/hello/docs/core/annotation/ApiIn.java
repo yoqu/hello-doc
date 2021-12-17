@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ApiIn {
 
-    ApiParamIn[] value() default {};
+    ApiParam[] value() default {};
 }

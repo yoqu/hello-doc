@@ -1,8 +1,8 @@
 package com.uyoqu.hello.docs.runner.entity;
 
-import com.uyoqu.hello.docs.core.gen.AbstractScanGen;
+import com.uyoqu.hello.docs.core.gen.ScanGenerate;
 import com.uyoqu.hello.docs.core.gen.ApiInfo;
-import com.uyoqu.hello.docs.core.gen.RunningGen;
+import com.uyoqu.hello.docs.core.gen.RunningGenerate;
 import com.uyoqu.hello.docs.core.vo.DtoVO;
 import com.uyoqu.hello.docs.core.vo.MenuGroupVO;
 import com.uyoqu.hello.docs.core.vo.ServiceVO;
@@ -38,7 +38,7 @@ public class DocConfigEntity {
 
     public static DocConfigEntity build(DocConfig docConfig) {
         try {
-            AbstractScanGen gen = new RunningGen();
+            ScanGenerate gen = new RunningGenerate();
             gen.init(docConfig.getApiInfo());
             gen.scanPackages(docConfig.getScanPackage());
             gen.handler();

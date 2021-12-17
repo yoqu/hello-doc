@@ -7,7 +7,7 @@ import java.io.IOException;
  * @date: 2018/10/18
  * @email: yoqulin@qq.com
  **/
-public interface Gen {
+public interface Generate {
   void scanPackages(String... packageName);
 
   void init(ApiInfo basicInfo);

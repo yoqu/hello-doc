@@ -1,5 +1,7 @@
 package com.uyoqu.hello.docs.core.annotation;
 
+import com.uyoqu.hello.docs.core.definition.RequestType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -10,14 +12,14 @@ import java.lang.annotation.Target;
 @Inherited
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ApiParamIn {
+public @interface ApiParam {
 
   boolean required() default true;
 
   /**
    * @return 参数名称
    */
-  String param() default "";
+  String name() default "";
 
   /**
    * @return 类型
@@ -47,6 +49,6 @@ public @interface ApiParamIn {
   /**
    * @return 参数请求类型
    */
-  String reqType() default "payload";
+  RequestType reqType() default RequestType.PARAM;
 }
 

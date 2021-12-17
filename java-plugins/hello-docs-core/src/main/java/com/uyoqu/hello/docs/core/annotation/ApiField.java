@@ -1,5 +1,7 @@
 package com.uyoqu.hello.docs.core.annotation;
 
+import com.uyoqu.hello.docs.core.definition.RequestType;
+
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -54,7 +56,7 @@ public @interface ApiField {
   /**
    * @return 参数请求类型
    */
-  String reqType() default "payload";
+  RequestType reqType() default RequestType.PARAM;
 
   /**
    * 在某些group下才进行展示
