@@ -38,6 +38,15 @@ Link： [详细文档](https://yoqu.gitee.io/hello-doc/#/guide)
 
 ## 更新日志
 
+-- 2.0.0-SNAPSHOT
+* 重构后端生成器，代码更简介和符合命名规范
+* 修复同名dto或接口导致菜单及跳转异常的bug
+* 增加通用request参数
+* request入参新增传参方式字段
+* 修复前端搜索服务不是以路径方式寻址的bug
+
+
+
 -- 1.0.3.1-SNAPSHOT
 
 * 增加web header参数支持
