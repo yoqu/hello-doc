@@ -2,102 +2,132 @@
 </style>
 
 <template>
-<div>
+  <div>
     <Alert show-icon>
-        特殊约定
-        <Icon type="ios-bulb-outline" slot="icon"></Icon>
-        <template slot="desc">
-            <ul>
-                <li v-for="item in basic_tip">{{item}}</li>
-            </ul>
-        </template>
+      特殊约定
+      <Icon type="ios-bulb-outline" slot="icon"></Icon>
+      <template slot="desc">
+        <ul>
+          <li v-for="item in basic_tip">{{ item }}</li>
+        </ul>
+      </template>
     </Alert>
     <Card style="margin-bottom: 10px;">
-        <p slot="title">通用请求头</p>
-        <Table :columns="columns" :data="header_base"></Table>
-    </Card>
-
-    <Card style="margin-bottom: 10px;">
-        <p slot="title">响应包基础参数</p>
-        <Table :columns="columns" :data="data_response"></Table>
+      <p slot="title">通用请求头</p>
+      <Table :columns="columns" :data="header_base"></Table>
     </Card>
     <Card style="margin-bottom: 10px;">
-        <p slot="title">通用返回码</p>
-        <Table :columns="code" :data="data_code" :loading="loading_code"></Table>
+      <p slot="title">通用请求入参</p>
+      <Table :columns="req_columns" :data="data_requests"></Table>
+    </Card>
+    <Card style="margin-bottom: 10px;">
+      <p slot="title">响应包基础参数</p>
+      <Table :columns="columns" :data="data_response"></Table>
+    </Card>
+    <Card style="margin-bottom: 10px;">
+      <p slot="title">通用返回码</p>
+      <Table :columns="code" :data="data_code" :loading="loading_code"></Table>
     </Card>
     <Card v-show="documentBody!=''">
-        <p slot="title">说明</p>
-        <div class="markdown-body">
-        </div>
+      <p slot="title">说明</p>
+      <div class="markdown-body">
+      </div>
     </Card>
-</div>
+  </div>
 </template>
 
 <script>
-import {
-    dataToArray
-} from "../utils/data";
 export default {
-    name: "BasicDefinition",
-    data: function () {
-        return {
-            columns: [{
-                    title: "参数名称",
-                    key: "name"
-                },
-                {
-                    title: "类型",
-                    key: "type"
-                },
-                {
-                    title: "描述",
-                    key: "desc"
-                },
-                {
-                    title: "备注",
-                    key: "remark"
-                }
-            ],
-            code: [{
-                    title: "返回码",
-                    key: "code"
-                },
-                {
-                    title: "说明",
-                    key: "desc"
-                }
-            ],
-            documentBody: "",
-            header_base: [],
-            // data_post: this.getDataPost(),
-            data_code: [],
-            basic_tip: {},
-            data_response: [],
-            loading_post: false,
-            loading_get: false,
-            loading_code: false,
-            loading_response: false
-        };
-    },
-    mounted() {
-        this.getBasic();
-        this.getHeader();
-        this.getDataCode();
-        this.getResp();
-    },
-    methods: {
-        getBasic() {
-            this.basic_tip = this.$store.state.basicInfo.basic["basicTip"];
+  name: "BasicDefinition",
+  data: function () {
+    return {
+      columns: [{
+        title: "参数名称",
+        key: "name"
+      },
+        {
+          title: "类型",
+          key: "type"
         },
-        getHeader() {
-            this.header_base = this.$store.state.basicInfo.basic.header;
+        {
+          title: "描述",
+          key: "desc"
         },
-        getResp() {
-            this.data_response = this.$store.state.basicInfo.basic.basicResp;
-        },
-        getDataCode() {
-            this.data_code = this.$store.state.basicInfo.code;
+        {
+          title: "备注",
+          key: "remark"
         }
+      ],
+      req_columns: [{
+        title: "参数名称",
+        key: "name"
+      },
+        {
+          title: "类型",
+          key: "type"
+        },
+        {
+          title: "描述",
+          key: "desc"
+        },
+        {
+          title: "备注",
+          key: "remark"
+        },
+        {
+          title: "请求类型",
+          key: "reqType"
+        },
+        {
+          title: "示例",
+          key: "example"
+        }
+      ],
+      code: [{
+        title: "返回码",
+        key: "code"
+      },
+        {
+          title: "说明",
+          key: "desc"
+        }
+      ],
+      documentBody: "",
+      header_base: [],
+      // data_post: this.getDataPost(),
+      data_code: [],
+      basic_tip: {},
+      data_response: [],
+      data_requests: [],
+      loading_post: false,
+      loading_get: false,
+      loading_code: false,
+      loading_response: false
+    };
+  },
+  mounted() {
+    this.getBasic();
+    this.getHeader();
+    this.getDataCode();
+    this.getResp();
+    this.getRequests();
+  },
+  methods: {
+    getBasic() {
+      this.basic_tip = this.$store.state.basicInfo.basic["tips"];
+    },
+    getHeader() {
+      this.header_base = this.$store.state.basicInfo.basic.headers;
+    },
+    getResp() {
+      this.data_response = this.$store.state.basicInfo.basic.responses;
+    },
+    getRequests() {
+      this.data_requests = this.$store.state.basicInfo.basic.requests;
+    },
+    getDataCode() {
+      this.data_code = this.$store.state.basicInfo.code;
     }
+  }
 };
 </script>

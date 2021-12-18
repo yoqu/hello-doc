@@ -90,10 +90,10 @@ export default {
             }
           }
         },
-        // {
-        //     title: '是否必填',
-        //     key: 'required'
-        // },
+        {
+            title: '是否必填',
+            key: 'required'
+        },
         {
           title: "描述",
           key: "desc"
@@ -158,7 +158,7 @@ export default {
           this.cnName = dataToField(dto.cnName);
           this.enName = dataToField(dto.enName);
           this.desc = dataToField(dto.desc);
-          this.table_data = dataToArray(dto.data);
+          this.table_data = dataToArray(dto.fields);
           this.timelines = dataToArray(dto.timelines);
         });
       } else {
@@ -167,9 +167,9 @@ export default {
         this.cnName = dataToField(dto.cnName);
         this.enName = dataToField(dto.enName);
         this.desc = dataToField(dto.desc);
-        this.table_data = dataToArray(dto.data);
+        this.table_data = dataToArray(dto.fields);
         this.timelines = dataToArray(dto.timelines);
-      }     
+      }
     }
   }
 };

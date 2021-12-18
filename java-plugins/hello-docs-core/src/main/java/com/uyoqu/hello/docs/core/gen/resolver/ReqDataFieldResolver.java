@@ -13,14 +13,21 @@ import java.util.List;
 
 public class ReqDataFieldResolver extends DataFieldsResolver {
 
+  private List<ReqDataVO> reqDataVOS = new ArrayList<>();
+
   public ReqDataFieldResolver(Class<? extends Annotation>[] groups) {
     super(groups);
   }
-  private List<ReqDataVO> reqDataVOS = new ArrayList<>();
 
   public static List<ReqDataVO> find(ApiInDTO def) {
     ReqDataFieldResolver callback = new ReqDataFieldResolver(def.groups());
     ReflectionUtils.doWithFields(def.clazz(), callback);
+    return callback.getReqDataVOS();
+  }
+
+  public static List<ReqDataVO> findReqs(Class<?> clazz) {
+    ReqDataFieldResolver callback = new ReqDataFieldResolver(null);
+    ReflectionUtils.doWithFields(clazz, callback);
     return callback.getReqDataVOS();
   }
 
@@ -37,7 +44,7 @@ public class ReqDataFieldResolver extends DataFieldsResolver {
     return dataVO;
   }
 
-  public List<ReqDataVO> getReqDataVOS(){
+  public List<ReqDataVO> getReqDataVOS() {
     return reqDataVOS;
   }
 }

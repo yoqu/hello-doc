@@ -6,6 +6,7 @@ import com.uyoqu.hello.docs.core.vo.ServiceVO;
 import com.uyoqu.hello.docs.core.vo.TimelineVO;
 import com.uyoqu.hello.docs.runner.entity.DocConfigEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ public class ApiController {
   DocConfigEntity configEntity;
 
   @GetMapping("/basic_definition.json")
+  @CrossOrigin
   public Map<String, Object> index() {
     if (configEntity != null) {
       return configEntity.getBasicMap();
@@ -34,6 +36,7 @@ public class ApiController {
   }
 
   @GetMapping("/dto.json")
+  @CrossOrigin
   public Map<String, DtoVO> dto() {
     if (configEntity != null) {
       return configEntity.getDtoMap();
@@ -42,6 +45,7 @@ public class ApiController {
   }
 
   @GetMapping("/nav_menu.json")
+  @CrossOrigin
   public List<MenuGroupVO> navMenu() {
     if (configEntity != null) {
       return configEntity.getMenuList();
@@ -50,6 +54,7 @@ public class ApiController {
   }
 
   @GetMapping("/service.json")
+  @CrossOrigin
   public Map<String, ServiceVO> service() {
     if (configEntity != null) {
       return configEntity.getServiceMap();
@@ -58,6 +63,7 @@ public class ApiController {
   }
 
   @GetMapping("/timelines.json")
+  @CrossOrigin
   public List<TimelineVO> timelines() {
     if (configEntity != null) {
       return configEntity.getTimelineList();

@@ -1,5 +1,6 @@
 package com.uyoqu.hello.docs.core.gen.resolver;
 
+import com.uyoqu.hello.docs.core.annotation.ApiDTO;
 import com.uyoqu.hello.docs.core.annotation.ApiField;
 import com.uyoqu.hello.docs.core.vo.DataVO;
 import org.apache.commons.lang3.StringUtils;
@@ -22,8 +23,16 @@ public class DataResolver {
     } else {
       dataVO.setType(apiField.type());
     }
-    dataVO.setLink(apiField.link());
+    linkDTO(f,dataVO);
     dataVO.setDesc(apiField.desc());
     dataVO.setRemark(apiField.remark());
+  }
+
+
+  private void linkDTO(Field field, DataVO dataVO) {
+    Class<?> fieldClass = field.getType();
+    if (fieldClass.isAnnotationPresent(ApiDTO.class)) {
+      dataVO.setLink(fieldClass.getName());
+    }
   }
 }

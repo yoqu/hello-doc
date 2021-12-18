@@ -3,7 +3,7 @@ package com.uyoqu.hello.docs.core.definition;
 import java.util.Objects;
 
 public enum RequestType {
-  PARAM("param"), FORM_DATA("form_data"), PAYLOAD("body");
+  DEFAULT("default"),PARAM("param"), FORM_DATA("form_data"), PAYLOAD("body");
   private final String name;
 
   RequestType(String name) {

@@ -44,11 +44,6 @@ public @interface ApiField {
   boolean required() default false;
 
   /**
-   * @return 外链
-   */
-  String link() default "";
-
-  /**
    * @return 例子
    */
   String example() default "";
@@ -56,7 +51,7 @@ public @interface ApiField {
   /**
    * @return 参数请求类型
    */
-  RequestType reqType() default RequestType.PARAM;
+  RequestType reqType() default RequestType.DEFAULT;
 
   /**
    * 在某些group下才进行展示

@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -232,22 +233,30 @@ public abstract class ScanGenerate implements Generate {
     try {
       if (!clazz.isAnnotationPresent(ApiGlobalCode.class))
         return;
-
       ApiGlobalCode ann = clazz.getAnnotation(ApiGlobalCode.class);
       List<CodeVO> voList = new ArrayList<>();
       basicMap.put("code", voList);
       timelineList.addAll(timelineResolver.resolveBasic(clazz));
-      Field[] fields = clazz.getDeclaredFields();
-      if (fields.length == 0)
-        return;
-      for (Field field : fields) {
-        CodeVO vo = new CodeVO();
-        Object obj = field.get(field.getName());
-        String code = (String) field.getType().getMethod("get" + StringUtils.capitalize(ann.codeKey())).invoke(obj);
-        vo.setCode(code);
-        String msg = (String) field.getType().getMethod("get" + StringUtils.capitalize(ann.msgKey())).invoke(obj);
-        vo.setDesc(msg);
-        voList.add(vo);
+      if (clazz.isEnum()) {//枚举类型单独处理
+        for (Object enumData : clazz.getEnumConstants()) {
+          Method getCode = clazz.getMethod("get" + StringUtils.capitalize(ann.codeKey()));
+          Method getValue = clazz.getMethod("get" + StringUtils.capitalize(ann.msgKey()));
+          CodeVO vo = new CodeVO();
+          vo.setCode(String.valueOf(getCode.invoke(enumData)));
+          vo.setDesc(String.valueOf(getValue.invoke(enumData)));
+          voList.add(vo);
+        }
+      } else {
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+          CodeVO vo = new CodeVO();
+          Object obj = field.get(field.getName());
+          String code = (String) field.getType().getMethod("get" + StringUtils.capitalize(ann.codeKey())).invoke(obj);
+          vo.setCode(code);
+          String msg = (String) field.getType().getMethod("get" + StringUtils.capitalize(ann.msgKey())).invoke(obj);
+          vo.setDesc(msg);
+          voList.add(vo);
+        }
       }
     } catch (Throwable e) {
       throw new GenException("分析基础定义异常，", clazz, e);
@@ -271,13 +280,12 @@ public abstract class ScanGenerate implements Generate {
       List<TimelineVO> timelines = timelineResolver.resolve(clazz, vo);
       timelineList.addAll(timelines);
       vo.setTimelines(timelines);
-      dtoMap.put(StringUtils.isNotBlank(ann.enName()) ? ann.enName() : clazz.getName(), vo);
+      dtoMap.put(vo.getFullName(), vo);
       //处理菜单
       String groupName = "数据结构";
       MenuGroupVO groupVo = menuTempMap.get(groupName);
       MenuVO menuVO = new MenuVO();
-      String enName = StringUtils.isBlank(ann.enName()) ? clazz.getSimpleName() : ann.enName();
-      menuVO.setTitle(enName);
+      menuVO.setTitle(vo.getFullName());
       menuVO.setName(ann.cnName());
       menuVO.setUrl(timelineResolver.resolveUrl(vo));
       menuVO.setGroup(ann.group());
@@ -322,7 +330,7 @@ public abstract class ScanGenerate implements Generate {
           basicInfo.setFinishCount(basicInfo.getFinishCount() + 1);
         }
         // 入参
-        vo.setRequests((List<ReqDataVO>) apiInResolver.resolve2(clazz));
+        vo.setRequests((List<ReqDataVO>) apiInResolver.resolve2(clazz, vo));
         // 出参
         vo.setResponses(apiOutResolver.resolve(clazz));
         //返回码
@@ -340,6 +348,9 @@ public abstract class ScanGenerate implements Generate {
       final RequestMapping mapping = clazz.getAnnotation(RequestMapping.class);
       if (mapping != null) {
         baseUrl = mapping.value()[0];
+        if (!baseUrl.startsWith("/")) {
+          baseUrl = "/" + baseUrl;
+        }
       }
       final String finalBaseUrl = baseUrl;
       ReflectionUtils.doWithMethods(clazz, method -> {
@@ -396,7 +407,7 @@ public abstract class ScanGenerate implements Generate {
           basicInfo.setFinishCount(basicInfo.getFinishCount() + 1);
         }
         //入参
-        vo.setRequests((List<ReqDataVO>) apiInResolver.resolve2(clazz));
+        vo.setRequests((List<ReqDataVO>) apiInResolver.resolve2(method, vo));
         // 出参
         vo.setResponses(apiOutResolver.resolve(method));
         //请求header

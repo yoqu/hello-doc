@@ -1,68 +1,134 @@
 [
-	{
-		"subs":[
-			{
-				"finish":0,
-				"group":"用户模块",
-				"isnew":"",
-				"name":"第三方帐号",
-				"title":"AccountVO",
-				"url":"/dto/AccountVO"
-			},
-			{
-				"finish":0,
-				"group":"广告位",
-				"isnew":"",
-				"name":"banner位",
-				"title":"BannerVO",
-				"url":"/dto/BannerVO"
-			},
-			{
-				"finish":0,
-				"group":"",
-				"isnew":"",
-				"name":"位置信息",
-				"title":"LocationVO",
-				"url":"/dto/LocationVO"
-			},
-			{
-				"finish":0,
-				"group":"基础参数",
-				"isnew":"",
-				"name":"基础请求参数",
-				"title":"ReqBaseVO",
-				"url":"/dto/ReqBaseVO"
-			},
-			{
-				"finish":0,
-				"group":"基础参数",
-				"isnew":"",
-				"name":"基础响应参数",
-				"title":"RespBaseVO",
-				"url":"/dto/RespBaseVO"
-			},
-			{
-				"finish":0,
-				"group":"用户模块",
-				"isnew":"",
-				"name":"用户",
-				"title":"UserVO",
-				"url":"/dto/UserVO"
-			}
-		],
-		"title":"数据结构"
-	},
-	{
-		"subs":[
-			{
-				"finish":100,
-				"group":"广告位",
-				"isnew":"",
-				"name":"首页banner位置",
-				"title":"com.iflytek.cbg.emoji.api.config.service.BannerListApiService",
-				"url":"/service/com.iflytek.cbg.emoji.api.config.service.BannerListApiService_1.0"
-			}
-		],
-		"title":"接口服务"
-	}
+  {
+    "title": "数据结构",
+    "subs": [
+      {
+        "title": "Device",
+        "name": "设备",
+        "url": "/dto/com.uyoqu.products.api.domain.Device",
+        "isnew": "",
+        "group": "设备",
+        "finish": 0
+      },
+      {
+        "title": "Receiver",
+        "name": "接收端",
+        "url": "/dto/com.uyoqu.products.api.domain.Receiver",
+        "isnew": "",
+        "group": "设备",
+        "finish": 0
+      }
+    ],
+    "sort": 0
+  },
+  {
+    "title": "接口服务",
+    "subs": [
+      {
+        "title": "com.uyoqu.products.api.controller.AliveController.alive",
+        "name": "存活接口",
+        "url": "/service/com.uyoqu.products.api.controller.AliveController.alive",
+        "isnew": null,
+        "group": "通用",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.DeviceApiController.info",
+        "name": "设备信息获取",
+        "url": "/service/com.uyoqu.products.api.controller.DeviceApiController.info",
+        "isnew": null,
+        "group": "设备管理接口",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.DeviceApiController.init",
+        "name": "初始化绑定设备",
+        "url": "/service/com.uyoqu.products.api.controller.DeviceApiController.init",
+        "isnew": null,
+        "group": "设备管理接口",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.DeviceApiController.qr",
+        "name": "获取微信二维码",
+        "url": "/service/com.uyoqu.products.api.controller.DeviceApiController.qr",
+        "isnew": null,
+        "group": "设备管理接口",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.DeviceApiController.sync",
+        "name": "设备状态同步",
+        "url": "/service/com.uyoqu.products.api.controller.DeviceApiController.sync",
+        "isnew": null,
+        "group": "设备管理接口",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.ForwardApiController.forward",
+        "name": "消息转发",
+        "url": "/service/com.uyoqu.products.api.controller.ForwardApiController.forward",
+        "isnew": null,
+        "group": "转发",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.ReceiverApiController.bind",
+        "name": "绑定接收端",
+        "url": "/service/com.uyoqu.products.api.controller.ReceiverApiController.bind",
+        "isnew": null,
+        "group": "接收端管理",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.ReceiverApiController.receiverCount",
+        "name": "接收端的条目",
+        "url": "/service/com.uyoqu.products.api.controller.ReceiverApiController.receiverCount",
+        "isnew": null,
+        "group": "接收端管理",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.ReceiverApiController.receiverList",
+        "name": "接收端详细数据",
+        "url": "/service/com.uyoqu.products.api.controller.ReceiverApiController.receiverList",
+        "isnew": null,
+        "group": "接收端管理",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.ReceiverApiController.switches",
+        "name": "接收器开关",
+        "url": "/service/com.uyoqu.products.api.controller.ReceiverApiController.switches",
+        "isnew": null,
+        "group": "接收端管理",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.ReceiverApiController.unbind",
+        "name": "绑定接收端",
+        "url": "/service/com.uyoqu.products.api.controller.ReceiverApiController.unbind",
+        "isnew": null,
+        "group": "接收端管理",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.WechatController.authGet",
+        "name": "微信接收",
+        "url": "/service/com.uyoqu.products.api.controller.WechatController.authGet",
+        "isnew": null,
+        "group": "微信",
+        "finish": 100
+      },
+      {
+        "title": "com.uyoqu.products.api.controller.WechatController.post",
+        "name": "微信接收",
+        "url": "/service/com.uyoqu.products.api.controller.WechatController.post",
+        "isnew": null,
+        "group": "微信",
+        "finish": 100
+      }
+    ],
+    "sort": 1
+  }
 ]
