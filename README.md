@@ -44,6 +44,9 @@ Link： [详细文档](https://yoqu.gitee.io/hello-doc/#/guide)
 * 增加通用request参数
 * request入参新增传参方式字段
 * 修复前端搜索服务不是以路径方式寻址的bug
+* 增加request入参树形结构支持
+* 升级至iview 4.x最新版本
+* 优化菜单跳转视觉效果
 
 
 
