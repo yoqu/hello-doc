@@ -312,9 +312,10 @@ export default {
     handleLoadingProps(item, callback) {
       getDtos().then(response => {
         let dto = response[item['link']];
+        this.fillTreeFields(dto['fields']);
         for (var key in dto['fields']) {
-          var name = dto['fields'][key]['name'];
-          dto['fields'][key]['key'] = item['name'] + "." + name;
+          let name = dto['fields'][key]['name'];
+          dto['fields'][key]['key'] = item['key'] + "." + name;
         }
         callback(dto['fields']);
       })
