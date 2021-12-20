@@ -177,7 +177,7 @@ public class ScanGenerate implements Generate {
     String groupName = "接口服务";
     MenuGroupVO groupVo = menuTempMap.get(groupName);
     MenuVO vo = new MenuVO();
-    vo.setTitle(serviceVo.getServiceFullName());
+    vo.setTitle(serviceVo.getServiceName());
     vo.setUrl("/service/" + serviceVo.getServiceFullName());
     vo.setName(serviceVo.getCnName());
     vo.setGroup(serviceVo.getGroup());

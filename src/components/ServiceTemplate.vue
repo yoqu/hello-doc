@@ -299,7 +299,6 @@ export default {
     },
     fillTreeFields(datas) {
       let dataArray = dataToArray(datas);
-      console.log("fill tree fields")
       for (let key in dataArray) {
         let item = dataArray[key];
         if (item['link'] != null && item['link'] != "") {
@@ -313,7 +312,6 @@ export default {
     handleLoadingProps(item, callback) {
       getDtos().then(response => {
         let dto = response[item['link']];
-        console.log(dto);
         for (var key in dto['fields']) {
           var name = dto['fields'][key]['name'];
           dto['fields'][key]['key'] = item['name'] + "." + name;
@@ -354,7 +352,6 @@ export default {
           this.injectData(service)
         });
       } else {
-        console.log(this.$route.params.name)
         let service = this.$store.state.service[this.$route.params.name]
         this.injectData(service)
       }

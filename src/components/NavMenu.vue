@@ -55,12 +55,12 @@
                 <template v-for="subItem in item.subs">
                     <template v-if="subItem.hasOwnProperty('subs')">
                         <template>
-                            <Submenu :key="subItem.name" :name="subItem.name" :title="subItem.name"
+                            <Submenu :key="subItem.url" :name="subItem.name" :title="subItem.name"
                                      :opened="subItem.opened">
                                 <template slot="title">
                                     {{subItem.name}}
                                 </template>
-                                <MenuItem v-for="item2 in subItem.subs" :key="item2.title" :name="item2.url"
+                                <MenuItem v-for="item2 in subItem.subs" :key="item2.url" :name="item2.url"
                                           ref="menuItem">
                                     <i-circle :percent="item2.finish" :size="iconSize" class="finish-icon"
                                               v-if="item2.finish>0">
@@ -118,7 +118,6 @@
         },
         methods: {
             menuLink: function (e) {
-                console.log(e);
                 this.$router.push(encodeURI(e));
                 // $('html,body').animate({scrollTop: 0}, 500);
             },
@@ -209,7 +208,6 @@
                     })
                     .catch(err => {
                         this.menus = [];
-                        console.error(response);
                         this.$Message.error({
                             content:
                                 "获取数据失败！ " +
