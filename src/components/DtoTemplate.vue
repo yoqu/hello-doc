@@ -67,7 +67,7 @@ export default {
           title: "类型",
           key: "type",
           render: (h, params) => {
-            if (params.row.hasOwnProperty("link") && params.row.link !== "") {
+            if (params.row.hasOwnProperty("link") && params.row.link !== ""&& params.row.link !== null) {
               return h("div", [
                 h(
                   "a",

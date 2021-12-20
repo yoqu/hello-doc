@@ -6,13 +6,21 @@ import com.uyoqu.hello.docs.core.vo.DtoVO;
 import com.uyoqu.hello.docs.core.vo.ServiceVO;
 import com.uyoqu.hello.docs.core.vo.TimelineVO;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
 
+
 public class TimelineResolver {
+  protected static final int NEW_TIMELINE_DAY = 7;
+  protected static final SimpleDateFormat TIMELINE_SDF = new SimpleDateFormat("yyyy-MM-dd");
 
   private List<TimelineVO> resolve(AnnotatedElement element, Supplier<String> supplier) {
     final List<TimelineVO> timelineVOS = new ArrayList<>();
@@ -47,6 +55,22 @@ public class TimelineResolver {
     return timelineVOS;
   }
 
+  public String resolveIsNew(AnnotatedElement element) throws ParseException {
+    ApiTimeline ann = element.getAnnotation(ApiTimeline.class);
+    if (ann == null || ann.value().length == 0)
+      return "";
+    for (Timeline timeline : ann.value()) {
+      Date date = TIMELINE_SDF.parse(timeline.time());
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(date);
+      cal.add(Calendar.DATE, NEW_TIMELINE_DAY);
+      Date now = new Date();
+      if (cal.getTime().getTime() >= now.getTime()) {
+        return "1";
+      }
+    }
+    return "";
+  }
   public List<TimelineVO> resolve(AnnotatedElement element, ServiceVO serviceVO) {
     return resolve(element, () -> resolveUrl(serviceVO));
   }
@@ -64,7 +88,7 @@ public class TimelineResolver {
   }
 
   public String resolveUrl(ServiceVO serviceVO) {
-    return "/service/" + serviceVO.getServiceFullName() + "_" + serviceVO.getVersion();
+    return "/service/" + serviceVO.getServiceFullName();
   }
 
   public String resolveUrl(DtoVO dtoVO) {

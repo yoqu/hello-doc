@@ -5,8 +5,6 @@ import com.uyoqu.hello.docs.core.annotation.ApiCodes;
 import com.uyoqu.hello.docs.core.annotation.ApiDTO;
 import com.uyoqu.hello.docs.core.annotation.ApiGlobalCode;
 import com.uyoqu.hello.docs.core.annotation.ApiService;
-import com.uyoqu.hello.docs.core.annotation.ApiTimeline;
-import com.uyoqu.hello.docs.core.annotation.Timeline;
 import com.uyoqu.hello.docs.core.gen.resolver.ApiInResolver;
 import com.uyoqu.hello.docs.core.gen.resolver.ApiOutResolver;
 import com.uyoqu.hello.docs.core.gen.resolver.DataFieldsResolver;
@@ -39,10 +37,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -54,13 +49,11 @@ import java.util.Set;
  * @date: 2018/10/18
  * @email: yoqulin@qq.com
  **/
-public abstract class ScanGenerate implements Generate {
+public class ScanGenerate implements Generate {
 
 
   public static final Logger log = LoggerFactory.getLogger(ScanGenerate.class);
-  protected static final SimpleDateFormat TIMELINE_SDF = new SimpleDateFormat("yyyy-MM-dd");
 
-  protected static final int NEW_TIMELINE_DAY = 7;
   private final Resolver headerResolver = new HeaderResolver();
   private final Resolver apiOutResolver = new ApiOutResolver();
   private final ApiInResolver apiInResolver = new ApiInResolver();
@@ -180,15 +173,20 @@ public abstract class ScanGenerate implements Generate {
     }
   }
 
-  private void resolveServiceMenu(ServiceVO serviceVo) {
+  private void resolveServiceMenu(AnnotatedElement element, ServiceVO serviceVo) {
     String groupName = "接口服务";
     MenuGroupVO groupVo = menuTempMap.get(groupName);
     MenuVO vo = new MenuVO();
-    vo.setTitle(serviceVo.getServiceName());
+    vo.setTitle(serviceVo.getServiceFullName());
     vo.setUrl("/service/" + serviceVo.getServiceFullName());
     vo.setName(serviceVo.getCnName());
     vo.setGroup(serviceVo.getGroup());
     vo.setFinish(serviceVo.getFinish());
+    try {
+      vo.setIsnew(timelineResolver.resolveIsNew(element));
+    } catch (ParseException exception) {
+      log.error("接口注解时间解析异常，异常位置：{}", element.toString());
+    }
     groupVo.getSubs().add(vo);
   }
 
@@ -289,7 +287,7 @@ public abstract class ScanGenerate implements Generate {
       menuVO.setName(ann.cnName());
       menuVO.setUrl(timelineResolver.resolveUrl(vo));
       menuVO.setGroup(ann.group());
-      menuVO.setIsnew(resolveIsNew(clazz));
+      menuVO.setIsnew(timelineResolver.resolveIsNew(clazz));
       groupVo.getSubs().add(menuVO);
     } catch (Throwable e) {
       throw new GenException("分析数据结构异常，", clazz, e);
@@ -342,7 +340,7 @@ public abstract class ScanGenerate implements Generate {
         vo.setTimelines(timelines);
         timelineList.addAll(timelines);
         serviceMap.put(vo.getServiceFullName(), vo);
-        resolveServiceMenu(vo);
+        resolveServiceMenu(clazz, vo);
       }
       String baseUrl = "";
       final RequestMapping mapping = clazz.getAnnotation(RequestMapping.class);
@@ -419,38 +417,11 @@ public abstract class ScanGenerate implements Generate {
         timelineList.addAll(timelines);
         vo.setTimelines(timelines);
         serviceMap.put(vo.getServiceFullName(), vo);
-        resolveServiceMenu(vo);
+        resolveServiceMenu(method, vo);
       });
     } catch (Throwable e) {
       throw new GenException("分析接口服务异常，", clazz, e);
     }
-  }
-
-  private String resolveIsNew(Class<?> clazz) throws GenException {
-    try {
-      if (!clazz.isAnnotationPresent(ApiTimeline.class))
-        return "";
-      ApiTimeline ann = clazz.getAnnotation(ApiTimeline.class);
-      return resolveIsNew(ann);
-    } catch (Throwable e) {
-      throw new GenException("分析时间轴是否更新时异常，", clazz, e);
-    }
-  }
-
-  private String resolveIsNew(ApiTimeline ann) throws ParseException {
-    if (ann == null || ann.value().length == 0)
-      return "";
-    for (Timeline timeline : ann.value()) {
-      Date date = TIMELINE_SDF.parse(timeline.time());
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(date);
-      cal.add(Calendar.DATE, NEW_TIMELINE_DAY);
-      Date now = new Date();
-      if (cal.getTime().getTime() >= now.getTime()) {
-        return "1";
-      }
-    }
-    return "";
   }
 
 }

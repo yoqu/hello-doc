@@ -120,7 +120,7 @@
             menuLink: function (e) {
                 console.log(e);
                 this.$router.push(encodeURI(e));
-                $('html,body').animate({scrollTop: 0}, 500);
+                // $('html,body').animate({scrollTop: 0}, 500);
             },
             searchapi(str) {
                 if (str == "") {

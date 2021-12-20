@@ -4,11 +4,11 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import App from './App'
 import router from './router'
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';    // 使用 CSS
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';    // 使用 CSS
 import Vuex from 'vuex'
 Vue.use(VueResource);
-Vue.use(iView);
+Vue.use(ViewUI);
 Vue.config.productionTip = false
 Vue.use(Vuex);
 const store = new Vuex.Store({
@@ -40,7 +40,7 @@ const store = new Vuex.Store({
 
 // // 路由处理全局LoadingBar进度条
 // router.beforeEach((to, from, next) => {
-//   iView.LoadingBar.start();
+//   ViewUI.LoadingBar.start();
 //   console.log("start init router.")
 //   if (window.vue == null) {
 //     getBasicDefinition("").then(response => {
@@ -59,7 +59,7 @@ const store = new Vuex.Store({
 // });
 
 router.afterEach(route => {
-  iView.LoadingBar.finish();
+  ViewUI.LoadingBar.finish();
 });
 
 /* eslint-disable no-new */
@@ -76,14 +76,14 @@ window.vue = vue;
 
 // vue-resource拦截器处理处理全局LoadingBar进度条
 Vue.http.interceptor.before = function (request, next) {
-  iView.LoadingBar.start();
+  ViewUI.LoadingBar.start();
   next();
 };
 
 Vue.http.interceptors.push(function (request, next) {
   // continue to next interceptor
   next(function (response) {
-    iView.LoadingBar.finish();
+    ViewUI.LoadingBar.finish();
   });
 });
 

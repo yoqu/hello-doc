@@ -44,7 +44,8 @@ public class ApiInResolver implements Resolver {
     }
     //处理method类型的数据
     if (!isAdded && element instanceof Method) {
-      for (Parameter parameter : ((Method) element).getParameters()) {
+      for (int i = 0; i < ((Method) element).getParameters().length; i++) {
+        Parameter parameter = ((Method) element).getParameters()[i];
         if (parameter.isAnnotationPresent(RequestHeader.class)
           || parameter.isAnnotationPresent(CookieValue.class)) {//跳过其他参数
           continue;
@@ -85,23 +86,27 @@ public class ApiInResolver implements Resolver {
         } else {
           List<ReqDataVO> bodyDataList = ReqDataFieldResolver.findReqs(clazz2);
           for (ReqDataVO reqDataVO : bodyDataList) {
-            if (vo.getMethod().contains("POST") ||
-              vo.getMethod().contains("DELETE") ||
-              vo.getMethod().contains("PUT")) {
-              if (parameter.isAnnotationPresent(RequestBody.class)) {
-                reqDataVO.setReqType(RequestType.PAYLOAD);
-              } else {
-                reqDataVO.setReqType(RequestType.FORM_DATA);
-              }
-            } else {
-              reqDataVO.setReqType(RequestType.PARAM);
-            }
+            bodyReqTypeFill(reqDataVO, vo, parameter);
           }
           reqDataVOS.addAll(bodyDataList);
         }
       }
     }
     return reqDataVOS;
+  }
+
+  private void bodyReqTypeFill(ReqDataVO reqDataVO, ServiceVO vo, Parameter parameter) {
+    if (vo.getMethod().contains("POST") ||
+      vo.getMethod().contains("DELETE") ||
+      vo.getMethod().contains("PUT")) {
+      if (parameter.isAnnotationPresent(RequestBody.class)) {
+        reqDataVO.setReqType(RequestType.PAYLOAD);
+      } else {
+        reqDataVO.setReqType(RequestType.FORM_DATA);
+      }
+    } else {
+      reqDataVO.setReqType(RequestType.PARAM);
+    }
   }
 
   @Override

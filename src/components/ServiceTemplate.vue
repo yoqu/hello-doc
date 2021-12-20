@@ -65,7 +65,8 @@
     </Card>
     <Card style="margin-top: 10px;">
       <p slot="title">请求数据包</p>
-      <Table :columns="req_columns" :data="request_data" :loading="table_loading"></Table>
+      <Table :columns="req_columns" :data="request_data" :loading="table_loading" row-key="key"
+             :load-data="handleLoadingProps"></Table>
     </Card>
     <Card style="margin-top: 10px;">
       <p slot="title">响应数据包</p>
@@ -96,9 +97,9 @@
 <script>
 import {checkUrl, dataToArray, dataToField} from "../utils/data";
 import markedHelper from "../utils/render";
-import {getNotes, getServices} from "@/api/doc";
+import {getDtos, getNotes, getServices} from "@/api/doc";
 import Clipboard from "clipboard";
-import DtoTemplate from "./DtoTemplate";
+
 export default {
   name: "ServiceTemplate",
   data: function () {
@@ -111,7 +112,8 @@ export default {
       req_columns: [
         {
           title: "参数名称",
-          key: "name"
+          key: "name",
+          tree: true
         },
         {
           title: "类型",
@@ -295,6 +297,30 @@ export default {
           console.error(err)
         });
     },
+    fillTreeFields(datas) {
+      let dataArray = dataToArray(datas);
+      console.log("fill tree fields")
+      for (let key in dataArray) {
+        let item = dataArray[key];
+        if (item['link'] != null && item['link'] != "") {
+          item['_loading'] = false;
+          item['children'] = []
+          item['key'] = item['name'];
+        }
+      }
+      return dataArray;
+    },
+    handleLoadingProps(item, callback) {
+      getDtos().then(response => {
+        let dto = response[item['link']];
+        console.log(dto);
+        for (var key in dto['fields']) {
+          var name = dto['fields'][key]['name'];
+          dto['fields'][key]['key'] = item['name'] + "." + name;
+        }
+        callback(dto['fields']);
+      })
+    },
     injectData(service) {
       this.cnName = dataToField(service.cnName);
       this.serviceName = dataToField(service.serviceName);
@@ -303,8 +329,8 @@ export default {
       this.version = dataToField(service.version);
       this.method = dataToField(service.method);
       this.headers_data = dataToArray(service.headers);
-      this.request_data = dataToArray(service.requests);
-      this.response_data = dataToArray(service.responses);
+      this.request_data = this.fillTreeFields(service.requests);
+      this.response_data = this.fillTreeFields(service.responses);
       this.api_codes_data = dataToArray(service.apiCodes);
       this.timelines = dataToArray(service.timelines);
       this.finish = service.finish;

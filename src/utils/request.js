@@ -1,5 +1,5 @@
 import axios from 'axios'
-import iView from 'iview';
+import iView from 'view-design';
 
 // import Qs from 'qs'
 // 创建axios实例
@@ -27,11 +27,11 @@ service.interceptors.response.use(
   },
   error => {
     iView.LoadingBar.finish();
-    console.log(error)  
-    let response = error.response;  
+    console.log(error)
+    let response = error.response;
     if (!error.response) {
       return console.log('Error', error.message);
-    }      
+    }
     return Promise.reject(error)
   }
 )
