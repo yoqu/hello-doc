@@ -151,7 +151,7 @@
             </Content>
         </Layout>
         <Footer>
-            2017-2018 &copy; {{info.copyright}}
+            2017-2021 &copy; {{info.copyright}}
         </Footer>
         <Drawer title="系统配置" :closable="false" v-model="configDrawer" width="450">
             <Form>
