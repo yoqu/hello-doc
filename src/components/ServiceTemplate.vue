@@ -155,10 +155,6 @@ export default {
           key: "remark"
         },
         {
-          title: "备注",
-          key: "remark"
-        },
-        {
           title: "请求类型",
           key: "reqType"
         },
