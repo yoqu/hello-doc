@@ -65,12 +65,12 @@
     </Card>
     <Card style="margin-top: 10px;">
       <p slot="title">请求数据包</p>
-      <Table :columns="req_columns" :data="request_data" :loading="table_loading" row-key="key"
+      <Table :columns="req_columns" :data="request_data" :loading="table_loading"  row-key="key" :update-show-children=true
              :load-data="handleLoadingProps"></Table>
     </Card>
     <Card style="margin-top: 10px;">
       <p slot="title">响应数据包</p>
-      <Table :columns="columns" :data="response_data" :loading="table_loading"></Table>
+      <Table :columns="columns" :data="response_data" :loading="table_loading"  row-key="key" :update-show-children=true></Table>
     </Card>
     <Card v-if="api_codes_data.length>0">
       <p slot="title">返回码</p>
@@ -176,7 +176,7 @@ export default {
           title: "类型",
           key: "type",
           render: (h, params) => {
-            if (params.row.hasOwnProperty("link") && params.row.link !== "") {
+            if (params.row.hasOwnProperty("link") && params.row.link !== "" && params.row.link !== null) {
               return h("div", [
                 h(
                   "a",
